@@ -1,0 +1,44 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{i as t,r as n}from"./react-DITjJg24.js";import{t as r}from"./jsx-runtime-MKhVqBIO.js";import{a as i,s as a}from"./blocks-DYXAApOk.js";function o(e){let n={code:`code`,h1:`h1`,h2:`h2`,h3:`h3`,li:`li`,ol:`ol`,p:`p`,strong:`strong`,table:`table`,tbody:`tbody`,td:`td`,th:`th`,thead:`thead`,tr:`tr`,ul:`ul`,...t(),...e.components};return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)(i,{title:`Introduction`}),`
+`,(0,c.jsx)(n.h1,{id:`hobbyx-design-system`,children:`HobbyX Design System`}),`
+`,(0,c.jsx)(n.p,{children:`Code version of the HobbyX (Hobby Index) design system: a dark-only marketplace and portfolio app for
+trading-card and collectibles collectors. These docs are light for easy reading; every component is shown on the
+dark app background, as in the product. Everything here is built from the Figma DS: the same variables,
+the same component properties, the same names.`}),`
+`,(0,c.jsx)(n.h2,{id:`how-it-is-built`,children:`How it is built`}),`
+`,(0,c.jsxs)(n.table,{children:[(0,c.jsx)(n.thead,{children:(0,c.jsxs)(n.tr,{children:[(0,c.jsx)(n.th,{children:`Layer`}),(0,c.jsx)(n.th,{children:`Source in Figma`}),(0,c.jsx)(n.th,{children:`In code`})]})}),(0,c.jsxs)(n.tbody,{children:[(0,c.jsxs)(n.tr,{children:[(0,c.jsx)(n.td,{children:(0,c.jsx)(n.strong,{children:`Tokens`})}),(0,c.jsx)(n.td,{children:`Variables: primitives, semantic colours, spacing, radius, typography`}),(0,c.jsxs)(n.td,{children:[(0,c.jsx)(n.code,{children:`tokens/source/*.tokens.json`}),` (W3C DTCG) → Style Dictionary → `,(0,c.jsx)(n.code,{children:`--hx-*`}),` CSS variables`]})]}),(0,c.jsxs)(n.tr,{children:[(0,c.jsx)(n.td,{children:(0,c.jsx)(n.strong,{children:`Typography`})}),(0,c.jsxs)(n.td,{children:[`125 text styles `,(0,c.jsx)(n.code,{children:`text <size>/<leading>/<weight>`})]}),(0,c.jsxs)(n.td,{children:[`3 composable classes: `,(0,c.jsx)(n.code,{children:`hx-text-sm hx-font-medium`})]})]}),(0,c.jsxs)(n.tr,{children:[(0,c.jsx)(n.td,{children:(0,c.jsx)(n.strong,{children:`Components`})}),(0,c.jsx)(n.td,{children:`Component sets with Variant / Boolean / Text properties`}),(0,c.jsx)(n.td,{children:`React + TypeScript; each prop is named after its Figma property`})]}),(0,c.jsxs)(n.tr,{children:[(0,c.jsx)(n.td,{children:(0,c.jsx)(n.strong,{children:`States`})}),(0,c.jsxs)(n.td,{children:[`Variants `,(0,c.jsx)(n.code,{children:`State = Hover / Pressed / Focus / Disabled`})]}),(0,c.jsxs)(n.td,{children:[`Native CSS states (`,(0,c.jsx)(n.code,{children:`:hover`}),`, `,(0,c.jsx)(n.code,{children:`:focus-visible`}),`, `,(0,c.jsx)(n.code,{children:`:disabled`}),`), not props`]})]})]})]}),`
+`,(0,c.jsxs)(n.p,{children:[`Every value in component CSS is a token. To change a colour, change the variable in `,(0,c.jsx)(n.code,{children:`tokens/`}),`
+and run `,(0,c.jsx)(n.code,{children:`npm run tokens`}),`; every component updates.`]}),`
+`,(0,c.jsx)(n.h2,{id:`what-is-inside`,children:`What is inside`}),`
+`,(0,c.jsxs)(n.ul,{children:[`
+`,(0,c.jsxs)(n.li,{children:[(0,c.jsx)(n.strong,{children:`Foundations:`}),` Colors, Typography, Spacing & Radius.`]}),`
+`,(0,c.jsxs)(n.li,{children:[(0,c.jsx)(n.strong,{children:`Actions:`}),` Button, IconButton.`]}),`
+`,(0,c.jsxs)(n.li,{children:[(0,c.jsx)(n.strong,{children:`Forms:`}),` Input, Checkbox, Radio, Switch.`]}),`
+`,(0,c.jsxs)(n.li,{children:[(0,c.jsx)(n.strong,{children:`Display:`}),` Badge, Avatar, Tabs, Skeleton.`]}),`
+`,(0,c.jsxs)(n.li,{children:[(0,c.jsx)(n.strong,{children:`Feedback:`}),` Alert, Toast, EmptyState, StatusIcon.`]}),`
+`,(0,c.jsxs)(n.li,{children:[(0,c.jsx)(n.strong,{children:`Overlays:`}),` Menu / DropdownMenu.`]}),`
+`,(0,c.jsxs)(n.li,{children:[(0,c.jsx)(n.strong,{children:`Patterns:`}),` MarketplaceCard: a real product card composed only from DS components.`]}),`
+`]}),`
+`,(0,c.jsx)(n.h2,{id:`principles`,children:`Principles`}),`
+`,(0,c.jsxs)(n.ol,{children:[`
+`,(0,c.jsxs)(n.li,{children:[(0,c.jsx)(n.strong,{children:`Figma is the source of truth.`}),` Code mirrors names and structure, so designers and developers talk
+about the same `,(0,c.jsx)(n.code,{children:`variant="ghost" size="sm"`}),`.`]}),`
+`,(0,c.jsxs)(n.li,{children:[(0,c.jsx)(n.strong,{children:`Semantic tokens only.`}),` Components use roles (`,(0,c.jsx)(n.code,{children:`stroke/mute`}),`, `,(0,c.jsx)(n.code,{children:`bg/main`}),`), never raw hex.`]}),`
+`,(0,c.jsxs)(n.li,{children:[(0,c.jsx)(n.strong,{children:`Accessible by default.`}),` Native `,(0,c.jsx)(n.code,{children:`<button>`}),` and `,(0,c.jsx)(n.code,{children:`<input>`}),`, visible focus rings, `,(0,c.jsx)(n.code,{children:`role="switch"`}),`,
+`,(0,c.jsx)(n.code,{children:`aria-*`}),` on menus and tabs, `,(0,c.jsx)(n.code,{children:`prefers-reduced-motion`}),` respected. The a11y panel checks every story.`]}),`
+`]}),`
+`,(0,c.jsx)(n.h2,{id:`found-during-the-audit-next-steps-for-the-figma-ds`,children:`Found during the audit (next steps for the Figma DS)`}),`
+`,(0,c.jsxs)(n.ul,{children:[`
+`,(0,c.jsxs)(n.li,{children:[`Badge: red and yellow `,(0,c.jsx)(n.code,{children:`bg`}),` ↔ `,(0,c.jsx)(n.code,{children:`text-icon`}),` variable names are swapped; the dot is always grey.`]}),`
+`,(0,c.jsx)(n.li,{children:`Typography: italic styles use the Regular face; "medium 10" styles are Regular; no semantic text roles yet.`}),`
+`,(0,c.jsxs)(n.li,{children:[`Avatar placeholder uses `,(0,c.jsx)(n.code,{children:`bg/primary dark`}),`, identical to the app background, so the circle disappears.`]}),`
+`,(0,c.jsxs)(n.li,{children:[`Toast uses a raw Tailwind colour (`,(0,c.jsx)(n.code,{children:`emerald/900`}),`) instead of a semantic variable.`]}),`
+`,(0,c.jsxs)(n.li,{children:[`Icon-only Button: `,(0,c.jsx)(n.code,{children:`Icon`}),` sm keeps a 20 px icon while Blur / Transparent sm use 16 px.`]}),`
+`,(0,c.jsx)(n.li,{children:`No Dialog / Bottom sheet component in the DS, although the product uses bottom sheets.`}),`
+`]}),`
+`,(0,c.jsx)(n.h3,{id:`contrast-fixes-v11`,children:`Contrast fixes (v1.1)`}),`
+`,(0,c.jsx)(n.p,{children:`An automated a11y check (axe, WCAG AA needs 4.5:1 for text) found five failing pairs. All of them are fixed in v1.1:`}),`
+`,(0,c.jsxs)(n.table,{children:[(0,c.jsx)(n.thead,{children:(0,c.jsxs)(n.tr,{children:[(0,c.jsx)(n.th,{children:`Token`}),(0,c.jsx)(n.th,{children:`Where`}),(0,c.jsx)(n.th,{children:`Before`}),(0,c.jsx)(n.th,{children:`Fix`}),(0,c.jsx)(n.th,{children:`After`})]})}),(0,c.jsxs)(n.tbody,{children:[(0,c.jsxs)(n.tr,{children:[(0,c.jsxs)(n.td,{children:[(0,c.jsx)(n.code,{children:`typography/Mute`}),` on `,(0,c.jsx)(n.code,{children:`bg/primary dark`})]}),(0,c.jsx)(n.td,{children:`Input, Checkbox, Radio, Switch descriptions`}),(0,c.jsx)(n.td,{children:`zinc/500 · 4.09:1`}),(0,c.jsx)(n.td,{children:`→ zinc/400`}),(0,c.jsx)(n.td,{children:`7.7:1`})]}),(0,c.jsxs)(n.tr,{children:[(0,c.jsxs)(n.td,{children:[(0,c.jsx)(n.code,{children:`typography/Mute`}),` on `,(0,c.jsx)(n.code,{children:`bg/secondary dark`})]}),(0,c.jsx)(n.td,{children:`Inactive Tabs`}),(0,c.jsx)(n.td,{children:`zinc/500 · 3.7:1`}),(0,c.jsx)(n.td,{children:`→ zinc/400`}),(0,c.jsx)(n.td,{children:`7.0:1`})]}),(0,c.jsxs)(n.tr,{children:[(0,c.jsxs)(n.td,{children:[(0,c.jsx)(n.code,{children:`typography/Mute`}),` on `,(0,c.jsx)(n.code,{children:`bg/blur`})]}),(0,c.jsx)(n.td,{children:`Menu shortcuts`}),(0,c.jsx)(n.td,{children:`zinc/500 · 3.74:1`}),(0,c.jsx)(n.td,{children:`→ zinc/400`}),(0,c.jsx)(n.td,{children:`7.1:1`})]}),(0,c.jsxs)(n.tr,{children:[(0,c.jsx)(n.td,{children:`Destructive link text`}),(0,c.jsx)(n.td,{children:`Destructive link button, Menu hint`}),(0,c.jsxs)(n.td,{children:[(0,c.jsx)(n.code,{children:`typography/Destructive dark`}),` red/700 · 3.05:1`]}),(0,c.jsxs)(n.td,{children:[`→ `,(0,c.jsx)(n.code,{children:`typography/Destructive`}),` red/500`]}),(0,c.jsx)(n.td,{children:`5.3:1`})]}),(0,c.jsxs)(n.tr,{children:[(0,c.jsx)(n.td,{children:`Badge pink filled (pink/50 text)`}),(0,c.jsx)(n.td,{children:`Badge`}),(0,c.jsx)(n.td,{children:`on pink/600 · 4.2:1`}),(0,c.jsx)(n.td,{children:`→ pink/700`}),(0,c.jsx)(n.td,{children:`5.5:1`})]})]})]}),`
+`,(0,c.jsxs)(n.p,{children:[(0,c.jsx)(n.code,{children:`Destructive dark`}),` stays in the DS: it is meant for light surfaces, it was used on a dark one by mistake.
+Muted icons and borders keep zinc/500: non-text elements need 3:1, and they pass.
+The only remaining flag is the Disabled Input (2.06:1). WCAG exempts disabled controls from contrast rules.
+After the fixes all 86 stories pass the check.`]})]})}function s(e={}){let{wrapper:n}={...t(),...e.components};return n?(0,c.jsx)(n,{...e,children:(0,c.jsx)(o,{...e})}):o(e)}var c;function l(){return(l=e((()=>{c=r(),n(),a()})))()}l();export{s as default};

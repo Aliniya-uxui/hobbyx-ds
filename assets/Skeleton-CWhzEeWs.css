@@ -1,0 +1,1 @@
+.hx-skeleton{border-radius:var(--hx-radius-lg);background:var(--hx-color-badge-white-blur-bg);animation:1.6s ease-in-out infinite hx-skeleton-pulse;display:block}.hx-skeleton[data-circle]{border-radius:var(--hx-radius-full)}@keyframes hx-skeleton-pulse{50%{opacity:.5}}@media (prefers-reduced-motion:reduce){.hx-skeleton{animation:none}}

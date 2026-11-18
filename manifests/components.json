@@ -1,0 +1,1968 @@
+{
+  "v": 0,
+  "components": {
+    "components-alert": {
+      "id": "components-alert",
+      "name": "Alert",
+      "path": "./src/components/Alert/Alert.stories.tsx",
+      "jsDocTags": {},
+      "reactDocgen": {
+        "description": "",
+        "methods": [],
+        "displayName": "Alert",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/Alert/Alert.tsx",
+        "actualName": "Alert",
+        "exportName": "Alert",
+        "props": {
+          "variant": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'default' | 'destructive' | 'blur'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'default'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'destructive'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'blur'"
+                }
+              ]
+            },
+            "description": "Figma property: Variant (Default / Destructive / bg blur)",
+            "defaultValue": {
+              "value": "'default'",
+              "computed": false
+            }
+          },
+          "size": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'L' | 'S' | 'xs'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'L'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'S'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'xs'"
+                }
+              ]
+            },
+            "description": "Padding & text: L 16 · S 12 · xs 10. Figma property: Size",
+            "defaultValue": {
+              "value": "'L'",
+              "computed": false
+            }
+          },
+          "title": {
+            "required": true,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Figma: Title Text"
+          },
+          "description": {
+            "required": false,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Figma: Description + Description Text"
+          },
+          "icon": {
+            "required": false,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Replaces the default icon (Info, or CircleAlert for destructive)"
+          },
+          "action": {
+            "required": false,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Figma: Button. A Button or link shown under the text."
+          }
+        },
+        "composes": [
+          "Omit"
+        ]
+      },
+      "stories": [
+        {
+          "id": "components-alert--default",
+          "name": "Default",
+          "snippet": "const Default = () => <Alert\n    title=\"Price updated\"\n    description=\"Market value was recalculated from 12 recent sales.\" />;"
+        },
+        {
+          "id": "components-alert--destructive",
+          "name": "Destructive",
+          "snippet": "const Destructive = () => <Alert\n    title=\"Payment failed\"\n    description=\"Your card was declined. Try another payment method.\"\n    variant=\"destructive\" />;"
+        },
+        {
+          "id": "components-alert--blur",
+          "name": "Blur",
+          "snippet": "const Blur = () => <Alert\n    title=\"Price updated\"\n    description=\"Market value was recalculated from 12 recent sales.\"\n    variant=\"blur\" />;"
+        },
+        {
+          "id": "components-alert--with-action",
+          "name": "With Action",
+          "snippet": "const WithAction = () => <Alert\n    title=\"Price updated\"\n    description=\"Market value was recalculated from 12 recent sales.\"\n    action={<Button size=\"xs\" variant=\"secondary\">View sales</Button>} />;"
+        },
+        {
+          "id": "components-alert--title-only",
+          "name": "Title Only",
+          "snippet": "const TitleOnly = () => <Alert title=\"Price updated\" description={undefined} />;"
+        },
+        {
+          "id": "components-alert--all-sizes",
+          "name": "All Sizes",
+          "snippet": "const AllSizes = (args) => (\n  <div style={{ display: 'grid', gap: 12 }}>\n    {(['L', 'S', 'xs'] as const).map((s) => <Alert key={s} {...args} size={s} />)}\n  </div>\n);"
+        }
+      ],
+      "import": "import { Alert, Button } from 'hobbyx-ds';\nimport { Button } from '../Button/Button';"
+    },
+    "components-avatar": {
+      "id": "components-avatar",
+      "name": "Avatar",
+      "path": "./src/components/Avatar/Avatar.stories.tsx",
+      "jsDocTags": {},
+      "reactDocgen": {
+        "description": "",
+        "methods": [],
+        "displayName": "Avatar",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/Avatar/Avatar.tsx",
+        "actualName": "Avatar",
+        "exportName": "Avatar",
+        "props": {
+          "src": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Photo URL. Figma Type=Image"
+          },
+          "name": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Used for alt text and initials. Figma Type=Text"
+          },
+          "size": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'xl' | 'lg' | 'md' | 'xs' | 'xxs'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'xl'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'lg'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'md'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'xs'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'xxs'"
+                }
+              ]
+            },
+            "description": "xl 40 · lg 36 · md 32 · xs 24 · xxs 16. Figma property: Size",
+            "defaultValue": {
+              "value": "'xl'",
+              "computed": false
+            }
+          },
+          "verified": {
+            "required": false,
+            "tsType": {
+              "name": "boolean"
+            },
+            "description": "Blue check in the corner. Figma property: Indicator = Verification",
+            "defaultValue": {
+              "value": "false",
+              "computed": false
+            }
+          }
+        },
+        "composes": [
+          "HTMLAttributes"
+        ]
+      },
+      "stories": [
+        {
+          "id": "components-avatar--image",
+          "name": "Image",
+          "snippet": "const Image = () => <Avatar src={photo} name=\"Alex Lee\" />;"
+        },
+        {
+          "id": "components-avatar--initials",
+          "name": "Initials",
+          "snippet": "const Initials = () => <Avatar src={undefined} name=\"Alex Lee\" />;"
+        },
+        {
+          "id": "components-avatar--placeholder",
+          "name": "Placeholder",
+          "snippet": "const Placeholder = () => <Avatar src={undefined} name={undefined} />;"
+        },
+        {
+          "id": "components-avatar--verified",
+          "name": "Verified",
+          "snippet": "const Verified = () => <Avatar src={photo} name=\"Alex Lee\" verified />;"
+        },
+        {
+          "id": "components-avatar--broken-image",
+          "name": "Broken Image",
+          "snippet": "const BrokenImage = () => <Avatar src=\"/missing.png\" name=\"Alex Lee\" />;",
+          "description": "A broken photo URL falls back to initials."
+        },
+        {
+          "id": "components-avatar--all-sizes",
+          "name": "All Sizes",
+          "snippet": "const AllSizes = (args) => (\n  <div style={{ display: 'grid', gap: 16 }}>\n    {[{ src: args.src }, { src: undefined }, { src: undefined, name: undefined }, { verified: true }].map((p, row) => (\n      <div key={row} style={{ display: 'flex', gap: 16, alignItems: 'center' }}>\n        {sizes.map((s) => <Avatar key={s} {...args} {...p} size={s} />)}\n      </div>\n    ))}\n  </div>\n);"
+        },
+        {
+          "id": "components-avatar--group",
+          "name": "Group",
+          "snippet": "const Group = () => (\n  <AvatarGroup>\n    <Avatar src={photo} name=\"Alex Lee\" size=\"md\" />\n    <Avatar src={photo2} name=\"Mia Park\" size=\"md\" />\n    <Avatar name=\"Sam Cole\" size=\"md\" />\n    <Avatar size=\"md\" />\n  </AvatarGroup>\n);"
+        }
+      ],
+      "import": "import { Avatar, AvatarGroup } from 'hobbyx-ds';\nimport photo from '../../assets/demo/avatar.svg';"
+    },
+    "components-badge": {
+      "id": "components-badge",
+      "name": "Badge",
+      "path": "./src/components/Badge/Badge.stories.tsx",
+      "jsDocTags": {},
+      "description": "Short status label: \"Live\", \"+12%\", \"Sold\". Not clickable.",
+      "reactDocgen": {
+        "description": "Short status label: \"Live\", \"+12%\", \"Sold\". Not clickable.",
+        "methods": [],
+        "displayName": "Badge",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/Badge/Badge.tsx",
+        "actualName": "Badge",
+        "exportName": "Badge",
+        "props": {
+          "color": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'green' | 'red' | 'yellow' | 'blue' | 'grey' | 'teal' | 'pink' | 'white' | 'blur'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'green'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'red'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'yellow'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'blue'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'grey'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'teal'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'pink'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'white'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'blur'"
+                }
+              ]
+            },
+            "description": "Figma property: color",
+            "defaultValue": {
+              "value": "'green'",
+              "computed": false
+            }
+          },
+          "type": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'blur' | 'filled'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'blur'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'filled'"
+                }
+              ]
+            },
+            "description": "Figma property: type. The `blur` colour exists only as type blur.",
+            "defaultValue": {
+              "value": "'blur'",
+              "computed": false
+            }
+          },
+          "size": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'L' | 'M' | 'S'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'L'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'M'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'S'"
+                }
+              ]
+            },
+            "description": "Height: L 32 · M 24 · S 22. Figma property: size",
+            "defaultValue": {
+              "value": "'M'",
+              "computed": false
+            }
+          },
+          "dot": {
+            "required": false,
+            "tsType": {
+              "name": "boolean"
+            },
+            "description": "Small dot before the text. Figma property: dot",
+            "defaultValue": {
+              "value": "false",
+              "computed": false
+            }
+          },
+          "leftIcon": {
+            "required": false,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Figma: icon left"
+          },
+          "rightIcon": {
+            "required": false,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Figma: icon right"
+          },
+          "children": {
+            "required": true,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": ""
+          }
+        },
+        "composes": [
+          "Omit"
+        ]
+      },
+      "stories": [
+        {
+          "id": "components-badge--blur",
+          "name": "Blur",
+          "snippet": "const Blur = () => <Badge>Badge</Badge>;"
+        },
+        {
+          "id": "components-badge--filled",
+          "name": "Filled",
+          "snippet": "const Filled = () => <Badge type=\"filled\">Badge</Badge>;"
+        },
+        {
+          "id": "components-badge--with-icon",
+          "name": "With Icon",
+          "snippet": "const WithIcon = () => <Badge leftIcon={<TrendingUp />}>+12%</Badge>;"
+        },
+        {
+          "id": "components-badge--with-dot",
+          "name": "With Dot",
+          "snippet": "const WithDot = () => <Badge color=\"red\" dot>Live</Badge>;"
+        },
+        {
+          "id": "components-badge--sold",
+          "name": "Sold",
+          "snippet": "const Sold = () => <Badge type=\"filled\" color=\"grey\" size=\"S\">Sold</Badge>;"
+        },
+        {
+          "id": "components-badge--all-colors",
+          "name": "All Colors",
+          "snippet": "const AllColors = (args) => (\n  <div style={{ display: 'grid', gap: 12 }}>\n    {(['blur', 'filled'] as const).map((type) => (\n      <div key={type} style={{ display: 'flex', gap: 8 }}>\n        {colors.map((c) => (\n          <Badge key={c} {...args} color={c} type={type}>{c}</Badge>\n        ))}\n      </div>\n    ))}\n  </div>\n);"
+        },
+        {
+          "id": "components-badge--all-sizes",
+          "name": "All Sizes",
+          "snippet": "const AllSizes = (args) => (\n  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>\n    {(['L', 'M', 'S'] as const).map((s) => (\n      <Badge key={s} {...args} size={s} leftIcon={<TrendingUp />}>Size {s}</Badge>\n    ))}\n  </div>\n);"
+        }
+      ],
+      "import": "import { Badge } from 'hobbyx-ds';\nimport { TrendingUp } from 'lucide-react';"
+    },
+    "components-button": {
+      "id": "components-button",
+      "name": "Button",
+      "path": "./src/components/Button/Button.stories.tsx",
+      "jsDocTags": {},
+      "description": "Main action button of HobbyX.\nStates (Hover, Pressed, Focused, Disabled) are not props: the browser applies them\non mouse over, click, keyboard focus and the `disabled` attribute.",
+      "reactDocgen": {
+        "description": "Main action button of HobbyX.\nStates (Hover, Pressed, Focused, Disabled) are not props: the browser applies them\non mouse over, click, keyboard focus and the `disabled` attribute.",
+        "methods": [],
+        "displayName": "Button",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/Button/Button.tsx",
+        "actualName": "Button",
+        "exportName": "Button",
+        "props": {
+          "variant": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "| 'primary'\n| 'secondary'\n| 'destructive'\n| 'ghost'\n| 'tinted'\n| 'link'\n| 'link-accent'\n| 'link-destructive'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'primary'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'secondary'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'destructive'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'ghost'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'tinted'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'link'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'link-accent'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'link-destructive'"
+                }
+              ]
+            },
+            "description": "Visual style. Figma property: Variant",
+            "defaultValue": {
+              "value": "'primary'",
+              "computed": false
+            }
+          },
+          "size": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'lg' | 'default' | 'sm' | 'xs'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'lg'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'default'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'sm'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'xs'"
+                }
+              ]
+            },
+            "description": "Height: lg 56 · default 44 · sm 36 · xs 26. Figma property: Size",
+            "defaultValue": {
+              "value": "'lg'",
+              "computed": false
+            }
+          },
+          "children": {
+            "required": true,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Button text. Figma property: Button Text"
+          },
+          "leftIcon": {
+            "required": false,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Icon before the text. Figma: Show Left Icon + Left Icon"
+          },
+          "rightIcon": {
+            "required": false,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Icon after the text. Figma: Show Right Icon + Right Icon"
+          },
+          "type": {
+            "defaultValue": {
+              "value": "'button'",
+              "computed": false
+            },
+            "required": false
+          }
+        },
+        "composes": [
+          "ButtonHTMLAttributes"
+        ]
+      },
+      "stories": [
+        {
+          "id": "components-button--primary",
+          "name": "Primary",
+          "snippet": "const Primary = () => <Button onClick={fn()}>Place bid</Button>;"
+        },
+        {
+          "id": "components-button--secondary",
+          "name": "Secondary",
+          "snippet": "const Secondary = () => <Button onClick={fn()} variant=\"secondary\">Make offer</Button>;"
+        },
+        {
+          "id": "components-button--destructive",
+          "name": "Destructive",
+          "snippet": "const Destructive = () => <Button onClick={fn()} variant=\"destructive\">Delete listing</Button>;"
+        },
+        {
+          "id": "components-button--ghost",
+          "name": "Ghost",
+          "snippet": "const Ghost = () => <Button onClick={fn()} variant=\"ghost\">Cancel</Button>;"
+        },
+        {
+          "id": "components-button--tinted",
+          "name": "Tinted",
+          "snippet": "const Tinted = () => <Button onClick={fn()} variant=\"tinted\">Filters</Button>;"
+        },
+        {
+          "id": "components-button--link",
+          "name": "Link",
+          "snippet": "const Link = () => <Button onClick={fn()} variant=\"link\">View all</Button>;"
+        },
+        {
+          "id": "components-button--with-icons",
+          "name": "With Icons",
+          "snippet": "const WithIcons = () => <Button onClick={fn()} leftIcon={<Gavel />} rightIcon={<ArrowRight />}>Place bid</Button>;"
+        },
+        {
+          "id": "components-button--disabled",
+          "name": "Disabled",
+          "snippet": "const Disabled = () => <Button onClick={fn()} disabled>Place bid</Button>;"
+        },
+        {
+          "id": "components-button--all-sizes",
+          "name": "All Sizes",
+          "snippet": "const AllSizes = (args) => (\n  <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>\n    {(['lg', 'default', 'sm', 'xs'] as const).map((size) => (\n      <Button key={size} {...args} size={size} leftIcon={<Gavel />}>{size}</Button>\n    ))}\n  </div>\n);"
+        },
+        {
+          "id": "components-button--all-variants",
+          "name": "All Variants",
+          "snippet": "const AllVariants = (args) => (\n  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, auto)', gap: 16, alignItems: 'center' }}>\n    {(['primary', 'secondary', 'destructive', 'ghost', 'tinted', 'link', 'link-accent', 'link-destructive'] as const).map((v) => (\n      <Button key={v} {...args} variant={v} leftIcon={v === 'destructive' ? <Trash2 /> : undefined}>{v}</Button>\n    ))}\n  </div>\n);"
+        }
+      ],
+      "import": "import { ArrowRight, Gavel, Trash2 } from 'lucide-react';\nimport { Button } from 'hobbyx-ds';\nimport { fn } from 'storybook/test';"
+    },
+    "components-checkbox": {
+      "id": "components-checkbox",
+      "name": "Checkbox",
+      "path": "./src/components/Checkbox/Checkbox.stories.tsx",
+      "jsDocTags": {},
+      "reactDocgen": {
+        "description": "",
+        "methods": [],
+        "displayName": "Checkbox",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/Checkbox/Checkbox.tsx",
+        "actualName": "Checkbox",
+        "exportName": "Checkbox",
+        "props": {
+          "size": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'L' | 'S'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'L'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'S'"
+                }
+              ]
+            },
+            "description": "Label text size: L 16 · S 14. Figma property: Size",
+            "defaultValue": {
+              "value": "'L'",
+              "computed": false
+            }
+          },
+          "label": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Figma: Show Text + Label Text"
+          },
+          "description": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Figma: Show Description + Description Text"
+          }
+        },
+        "composes": [
+          "Omit"
+        ]
+      },
+      "stories": [
+        {
+          "id": "components-checkbox--default",
+          "name": "Default",
+          "snippet": "const Default = () => <Checkbox label=\"Graded cards only\" description=\"Hide raw cards from the results.\" />;"
+        },
+        {
+          "id": "components-checkbox--checked",
+          "name": "Checked",
+          "snippet": "const Checked = () => <Checkbox\n    label=\"Graded cards only\"\n    description=\"Hide raw cards from the results.\"\n    defaultChecked />;"
+        },
+        {
+          "id": "components-checkbox--small",
+          "name": "Small",
+          "snippet": "const Small = () => <Checkbox\n    label=\"Graded cards only\"\n    description=\"Hide raw cards from the results.\"\n    size=\"S\"\n    defaultChecked />;"
+        },
+        {
+          "id": "components-checkbox--label-only",
+          "name": "Label Only",
+          "snippet": "const LabelOnly = () => <Checkbox label=\"Graded cards only\" description={undefined} />;"
+        },
+        {
+          "id": "components-checkbox--all-states",
+          "name": "All States",
+          "snippet": "const AllStates = () => <div\n    style={{ display: 'grid', gridTemplateColumns: 'repeat(2, auto)', gap: 24 }}>\n    <Checkbox label=\"Graded cards only\" description=\"Hide raw cards from the results.\" />\n    <Checkbox\n        label=\"Graded cards only\"\n        description=\"Hide raw cards from the results.\"\n        disabled />\n    <Checkbox\n        label=\"Graded cards only\"\n        description=\"Hide raw cards from the results.\"\n        defaultChecked />\n    <Checkbox\n        label=\"Graded cards only\"\n        description=\"Hide raw cards from the results.\"\n        defaultChecked\n        disabled />\n</div>;"
+        }
+      ],
+      "import": "import { Checkbox } from 'hobbyx-ds';"
+    },
+    "components-emptystate": {
+      "id": "components-emptystate",
+      "name": "EmptyState",
+      "path": "./src/components/EmptyState/EmptyState.stories.tsx",
+      "jsDocTags": {},
+      "reactDocgen": {
+        "description": "",
+        "methods": [],
+        "displayName": "EmptyState",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/EmptyState/EmptyState.tsx",
+        "actualName": "EmptyState",
+        "exportName": "EmptyState",
+        "props": {
+          "title": {
+            "required": true,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": ""
+          },
+          "description": {
+            "required": false,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": ""
+          },
+          "icon": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'success' | 'failed' | 'warning' | 'neutral'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'success'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'failed'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'warning'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'neutral'"
+                }
+              ]
+            },
+            "description": "Glyph type of the StatusIcon on top",
+            "defaultValue": {
+              "value": "'neutral'",
+              "computed": false
+            }
+          },
+          "actions": {
+            "required": false,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Buttons, stacked, 180 wide"
+          }
+        },
+        "composes": [
+          "Omit"
+        ]
+      },
+      "stories": [
+        {
+          "id": "components-emptystate--default",
+          "name": "Default",
+          "snippet": "const Default = () => <EmptyState\n    title=\"Start a conversation\"\n    description=\"Connect with people on Hobby Index and your conversations will appear here.\"\n    actions={<Button size=\"default\">New message</Button>} />;"
+        },
+        {
+          "id": "components-emptystate--no-results",
+          "name": "No Results",
+          "snippet": "const NoResults = () => <EmptyState\n    title=\"No cards found\"\n    description=\"Try another name or remove some filters.\"\n    actions={(<>\n      <Button size=\"default\">Clear filters</Button>\n      <Button size=\"default\" variant=\"ghost\">Back to marketplace</Button>\n    </>)} />;"
+        },
+        {
+          "id": "components-emptystate--success",
+          "name": "Success",
+          "snippet": "const Success = () => <EmptyState\n    title=\"Listing published\"\n    description=\"Buyers can now see your card in the marketplace.\"\n    icon=\"success\" />;"
+        },
+        {
+          "id": "components-emptystate--failed",
+          "name": "Failed",
+          "snippet": "const Failed = () => <EmptyState\n    title=\"Scan failed\"\n    description=\"We could not read the card. Retake the photo in good light.\"\n    icon=\"failed\"\n    actions={<Button size=\"default\">Try again</Button>} />;"
+        }
+      ],
+      "import": "import { Button, EmptyState } from 'hobbyx-ds';\nimport { Button } from '../Button/Button';"
+    },
+    "components-iconbutton": {
+      "id": "components-iconbutton",
+      "name": "IconButton",
+      "path": "./src/components/IconButton/IconButton.stories.tsx",
+      "jsDocTags": {},
+      "reactDocgen": {
+        "description": "",
+        "methods": [],
+        "displayName": "IconButton",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/IconButton/IconButton.tsx",
+        "actualName": "IconButton",
+        "exportName": "IconButton",
+        "props": {
+          "variant": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'icon' | 'transparent' | 'blur'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'icon'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'transparent'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'blur'"
+                }
+              ]
+            },
+            "description": "Figma property: Variant",
+            "defaultValue": {
+              "value": "'transparent'",
+              "computed": false
+            }
+          },
+          "size": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'lg' | 'default' | 'sm' | 'xs'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'lg'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'default'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'sm'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'xs'"
+                }
+              ]
+            },
+            "description": "lg 48 · default 40 · sm 32 · xs 24. Figma property: Size",
+            "defaultValue": {
+              "value": "'default'",
+              "computed": false
+            }
+          },
+          "children": {
+            "required": true,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "The icon, e.g. <Heart />"
+          },
+          "aria-label": {
+            "required": true,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Required: what the button does, read by screen readers"
+          },
+          "type": {
+            "defaultValue": {
+              "value": "'button'",
+              "computed": false
+            },
+            "required": false
+          }
+        },
+        "composes": [
+          "ButtonHTMLAttributes"
+        ]
+      },
+      "stories": [
+        {
+          "id": "components-iconbutton--transparent",
+          "name": "Transparent",
+          "snippet": "const Transparent = () => <IconButton aria-label=\"Save\" onClick={fn()}><Heart /></IconButton>;"
+        },
+        {
+          "id": "components-iconbutton--blur",
+          "name": "Blur",
+          "snippet": "const Blur = () => <IconButton aria-label=\"Save\" onClick={fn()} variant=\"blur\"><Heart /></IconButton>;"
+        },
+        {
+          "id": "components-iconbutton--icon",
+          "name": "Icon",
+          "snippet": "const Icon = () => <IconButton aria-label=\"Close\" onClick={fn()} variant=\"icon\"><X /></IconButton>;"
+        },
+        {
+          "id": "components-iconbutton--disabled",
+          "name": "Disabled",
+          "snippet": "const Disabled = () => <IconButton aria-label=\"Save\" onClick={fn()} disabled><Heart /></IconButton>;"
+        },
+        {
+          "id": "components-iconbutton--all-sizes",
+          "name": "All Sizes",
+          "snippet": "const AllSizes = (args) => (\n  <div style={{ display: 'grid', gap: 16 }}>\n    {(['icon', 'transparent', 'blur'] as const).map((v) => (\n      <div key={v} style={{ display: 'flex', gap: 16, alignItems: 'center' }}>\n        {(['lg', 'default', 'sm', 'xs'] as const).map((s) => (\n          <IconButton key={s} {...args} variant={v} size={s} aria-label=\"Share\"><Share2 /></IconButton>\n        ))}\n      </div>\n    ))}\n  </div>\n);"
+        }
+      ],
+      "import": "import { Heart, Share2, X } from 'lucide-react';\nimport { IconButton } from 'hobbyx-ds';\nimport { fn } from 'storybook/test';"
+    },
+    "components-input": {
+      "id": "components-input",
+      "name": "Input",
+      "path": "./src/components/Input/Input.stories.tsx",
+      "jsDocTags": {},
+      "reactDocgen": {
+        "description": "",
+        "methods": [],
+        "displayName": "Input",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/Input/Input.tsx",
+        "actualName": "Input",
+        "exportName": "Input",
+        "props": {
+          "variant": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'default' | 'search' | 'chat'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'default'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'search'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'chat'"
+                }
+              ]
+            },
+            "description": "Figma property: Type",
+            "defaultValue": {
+              "value": "'default'",
+              "computed": false
+            }
+          },
+          "size": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'L' | 'S'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'L'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'S'"
+                }
+              ]
+            },
+            "description": "Height: L 48 · S 40 (Figma has S only for Chat live). Figma property: Size",
+            "defaultValue": {
+              "value": "'L'",
+              "computed": false
+            }
+          },
+          "label": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Figma: Show Label + Label Text"
+          },
+          "description": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Figma: Show Description + Description Text. Turns red when `error` is set."
+          },
+          "error": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "boolean | string",
+              "elements": [
+                {
+                  "name": "boolean"
+                },
+                {
+                  "name": "string"
+                }
+              ]
+            },
+            "description": "Figma State=Error. `true` or an error message that replaces the description."
+          },
+          "leftIcon": {
+            "required": false,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Figma: Icon left + Icon. Search shows a magnifier by default."
+          },
+          "rightIcon": {
+            "required": false,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Figma: Icon right"
+          },
+          "onClear": {
+            "required": false,
+            "tsType": {
+              "name": "signature",
+              "type": "function",
+              "raw": "() => void",
+              "signature": {
+                "arguments": [],
+                "return": {
+                  "name": "void"
+                }
+              }
+            },
+            "description": "Search only: shows the clear (×) button when there is a value."
+          }
+        },
+        "composes": [
+          "Omit"
+        ]
+      },
+      "stories": [
+        {
+          "id": "components-input--default",
+          "name": "Default",
+          "snippet": "const Default = () => <Input\n    label=\"Card name\"\n    placeholder=\"e.g. Charizard Base Set\"\n    description=\"As printed on the card.\" />;"
+        },
+        {
+          "id": "components-input--filled",
+          "name": "Filled",
+          "snippet": "const Filled = () => <Input\n    label=\"Card name\"\n    placeholder=\"e.g. Charizard Base Set\"\n    description=\"As printed on the card.\"\n    defaultValue=\"Charizard Base Set\" />;"
+        },
+        {
+          "id": "components-input--required",
+          "name": "Required",
+          "snippet": "const Required = () => <Input\n    label=\"Card name\"\n    placeholder=\"e.g. Charizard Base Set\"\n    description=\"As printed on the card.\"\n    required />;"
+        },
+        {
+          "id": "components-input--with-error",
+          "name": "With Error",
+          "snippet": "const WithError = () => <Input\n    label=\"Card name\"\n    placeholder=\"e.g. Charizard Base Set\"\n    description=\"As printed on the card.\"\n    defaultValue=\"Charizard\"\n    error=\"Card not found. Check the spelling.\" />;"
+        },
+        {
+          "id": "components-input--disabled",
+          "name": "Disabled",
+          "snippet": "const Disabled = () => <Input\n    label=\"Card name\"\n    placeholder=\"e.g. Charizard Base Set\"\n    description=\"As printed on the card.\"\n    disabled />;"
+        },
+        {
+          "id": "components-input--search",
+          "name": "Search",
+          "snippet": "const Search = () => {\n    const [value, setValue] = useState('');\n\n    return (\n        <Input\n            label={undefined}\n            placeholder=\"Search...\"\n            description={undefined}\n            variant=\"search\"\n            value={value}\n            onChange={(e) => setValue(e.target.value)}\n            onClear={() => setValue('')} />\n    );\n};"
+        },
+        {
+          "id": "components-input--chat-live",
+          "name": "Chat Live",
+          "snippet": "const ChatLive = () => <Input\n    label={undefined}\n    placeholder=\"Say something…\"\n    description={undefined}\n    variant=\"chat\" />;"
+        },
+        {
+          "id": "components-input--chat-live-small",
+          "name": "Chat Live Small",
+          "snippet": "const ChatLiveSmall = () => <Input\n    label={undefined}\n    placeholder=\"Say something…\"\n    description={undefined}\n    variant=\"chat\"\n    size=\"S\" />;"
+        }
+      ],
+      "import": "import { Input } from 'hobbyx-ds';"
+    },
+    "components-menu": {
+      "id": "components-menu",
+      "name": "Menu",
+      "path": "./src/components/Menu/Menu.stories.tsx",
+      "jsDocTags": {},
+      "description": "Figma: DS page \"Menubar\": `Menubar / Menu` (210:3534), `Menubar / Item / Default` (419:6748),\n`Menubar / Item / Separator` (210:3533). In HobbyX all open dropdowns use this menu.",
+      "reactDocgen": {
+        "description": "Figma: DS page \"Menubar\": `Menubar / Menu` (210:3534), `Menubar / Item / Default` (419:6748),\n`Menubar / Item / Separator` (210:3533). In HobbyX all open dropdowns use this menu.",
+        "methods": [],
+        "displayName": "Menu",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/Menu/Menu.tsx",
+        "actualName": "Menu",
+        "exportName": "Menu"
+      },
+      "stories": [
+        {
+          "id": "components-menu--panel",
+          "name": "Panel",
+          "snippet": "const Panel = () => <Menu aria-label=\"Listing actions\">{items()}</Menu>;",
+          "description": "The open menu panel on its own, as in Figma."
+        },
+        {
+          "id": "components-menu--dropdown",
+          "name": "Dropdown",
+          "snippet": "const Dropdown = () => (\n  <div style={{ height: 320, display: 'flex', justifyContent: 'center', paddingTop: 16 }}>\n    <DropdownMenu\n      align=\"end\"\n      trigger={(props) => (\n        <Button {...props} variant=\"tinted\" size=\"sm\" aria-label=\"More actions\" leftIcon={<EllipsisVertical />}>More</Button>\n      )}\n    >\n      {items(fn())}\n    </DropdownMenu>\n  </div>\n);",
+          "description": "Click the trigger. Closes on item click, outside click or Escape; arrow keys move between items."
+        }
+      ],
+      "import": "import { Button, DropdownMenu, Menu, MenuItem, MenuSeparator } from 'hobbyx-ds';\nimport { EllipsisVertical, Flag, Pencil, Share2, Tag, Trash2 } from 'lucide-react';"
+    },
+    "components-radio": {
+      "id": "components-radio",
+      "name": "Radio",
+      "path": "./src/components/Radio/Radio.stories.tsx",
+      "jsDocTags": {},
+      "reactDocgen": {
+        "description": "",
+        "methods": [],
+        "displayName": "Radio",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/Radio/Radio.tsx",
+        "actualName": "Radio",
+        "exportName": "Radio",
+        "props": {
+          "label": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Figma: Show Text + Switch Text"
+          },
+          "description": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Figma: Show Description + Description Text"
+          },
+          "weight": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'medium' | 'regular'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'medium'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'regular'"
+                }
+              ]
+            },
+            "description": "Figma property: Font Weight",
+            "defaultValue": {
+              "value": "'medium'",
+              "computed": false
+            }
+          },
+          "framed": {
+            "required": false,
+            "tsType": {
+              "name": "boolean"
+            },
+            "description": "Bordered card around the item. Figma property: frame = yes",
+            "defaultValue": {
+              "value": "false",
+              "computed": false
+            }
+          }
+        },
+        "composes": [
+          "Omit"
+        ]
+      },
+      "stories": [
+        {
+          "id": "components-radio--default",
+          "name": "Default",
+          "snippet": "const Default = () => <Radio name=\"demo\" label=\"Standard shipping\" description=\"3–5 business days\" />;"
+        },
+        {
+          "id": "components-radio--checked",
+          "name": "Checked",
+          "snippet": "const Checked = () => <Radio\n    name=\"demo\"\n    label=\"Standard shipping\"\n    description=\"3–5 business days\"\n    defaultChecked />;"
+        },
+        {
+          "id": "components-radio--framed",
+          "name": "Framed",
+          "snippet": "const Framed = () => <Radio\n    name=\"demo\"\n    label=\"Standard shipping\"\n    description=\"3–5 business days\"\n    framed\n    defaultChecked />;"
+        },
+        {
+          "id": "components-radio--disabled",
+          "name": "Disabled",
+          "snippet": "const Disabled = () => <Radio\n    name=\"demo\"\n    label=\"Standard shipping\"\n    description=\"3–5 business days\"\n    disabled\n    defaultChecked />;"
+        },
+        {
+          "id": "components-radio--group",
+          "name": "Group",
+          "snippet": "const Group = () => (\n  <div role=\"radiogroup\" aria-label=\"Shipping\" style={{ display: 'grid', gap: 12, width: 280 }}>\n    <Radio name=\"ship\" framed defaultChecked label=\"Standard shipping\" description=\"3–5 business days\" />\n    <Radio name=\"ship\" framed label=\"Express shipping\" description=\"1–2 business days\" />\n    <Radio name=\"ship\" framed disabled label=\"Vault storage\" description=\"Not available for this item\" />\n  </div>\n);",
+          "description": "Same `name` = one group: only one option can be selected."
+        }
+      ],
+      "import": "import { Radio } from 'hobbyx-ds';"
+    },
+    "components-skeleton": {
+      "id": "components-skeleton",
+      "name": "Skeleton",
+      "path": "./src/components/Skeleton/Skeleton.stories.tsx",
+      "jsDocTags": {},
+      "reactDocgen": {
+        "description": "",
+        "methods": [],
+        "displayName": "Skeleton",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/Skeleton/Skeleton.tsx",
+        "actualName": "Skeleton",
+        "exportName": "Skeleton",
+        "props": {
+          "width": {
+            "required": false,
+            "tsType": {
+              "name": "CSSProperties['width']",
+              "raw": "CSSProperties['width']"
+            },
+            "description": "CSS width, e.g. 138 or '100%'",
+            "defaultValue": {
+              "value": "'100%'",
+              "computed": false
+            }
+          },
+          "height": {
+            "required": false,
+            "tsType": {
+              "name": "CSSProperties['height']",
+              "raw": "CSSProperties['height']"
+            },
+            "description": "CSS height, e.g. 27",
+            "defaultValue": {
+              "value": "27",
+              "computed": false
+            }
+          },
+          "circle": {
+            "required": false,
+            "tsType": {
+              "name": "boolean"
+            },
+            "description": "Round shape for avatars and dots",
+            "defaultValue": {
+              "value": "false",
+              "computed": false
+            }
+          }
+        },
+        "composes": [
+          "HTMLAttributes"
+        ]
+      },
+      "stories": [
+        {
+          "id": "components-skeleton--item",
+          "name": "Item",
+          "snippet": "const Item = () => <Skeleton width={138} height={27} />;"
+        },
+        {
+          "id": "components-skeleton--circle",
+          "name": "Circle",
+          "snippet": "const Circle = () => <Skeleton width={40} height={40} circle />;"
+        },
+        {
+          "id": "components-skeleton--card-loading",
+          "name": "Card Loading",
+          "snippet": "const CardLoading = () => (\n  <div style={{ width: 180, display: 'grid', gap: 8 }}>\n    <Skeleton height={240} style={{ borderRadius: 16 }} />\n    <Skeleton width=\"80%\" height={16} />\n    <Skeleton width=\"50%\" height={16} />\n    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>\n      <Skeleton circle width={24} height={24} />\n      <Skeleton width={80} height={12} />\n    </div>\n  </div>\n);",
+          "description": "Loading state of a marketplace card, built from Skeleton items."
+        }
+      ],
+      "import": "import { Skeleton } from 'hobbyx-ds';"
+    },
+    "components-statusicon": {
+      "id": "components-statusicon",
+      "name": "StatusIcon",
+      "path": "./src/components/StatusIcon/StatusIcon.stories.tsx",
+      "jsDocTags": {},
+      "reactDocgen": {
+        "description": "",
+        "methods": [],
+        "displayName": "StatusIcon",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/StatusIcon/StatusIcon.tsx",
+        "actualName": "StatusIcon",
+        "exportName": "StatusIcon",
+        "props": {
+          "type": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'success' | 'failed' | 'warning' | 'neutral'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'success'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'failed'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'warning'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'neutral'"
+                }
+              ]
+            },
+            "description": "Figma property: type",
+            "defaultValue": {
+              "value": "'neutral'",
+              "computed": false
+            }
+          },
+          "size": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'s' | 'm' | 'L'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'s'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'m'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'L'"
+                }
+              ]
+            },
+            "description": "s 40 · m 56 · L 70. Figma property: size",
+            "defaultValue": {
+              "value": "'m'",
+              "computed": false
+            }
+          }
+        },
+        "composes": [
+          "HTMLAttributes"
+        ]
+      },
+      "stories": [
+        {
+          "id": "components-statusicon--neutral",
+          "name": "Neutral",
+          "snippet": "const Neutral = () => <StatusIcon />;"
+        },
+        {
+          "id": "components-statusicon--success",
+          "name": "Success",
+          "snippet": "const Success = () => <StatusIcon type=\"success\" />;"
+        },
+        {
+          "id": "components-statusicon--failed",
+          "name": "Failed",
+          "snippet": "const Failed = () => <StatusIcon type=\"failed\" />;"
+        },
+        {
+          "id": "components-statusicon--warning",
+          "name": "Warning",
+          "snippet": "const Warning = () => <StatusIcon type=\"warning\" />;"
+        },
+        {
+          "id": "components-statusicon--all",
+          "name": "All",
+          "snippet": "const All = () => (\n  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 90px)', gap: 24, justifyItems: 'center', alignItems: 'center' }}>\n    {(['L', 'm', 's'] as const).flatMap((size) =>\n      (['success', 'failed', 'neutral', 'warning'] as const).map((type) => <StatusIcon key={size + type} type={type} size={size} />),\n    )}\n  </div>\n);"
+        }
+      ],
+      "import": "import { StatusIcon } from 'hobbyx-ds';"
+    },
+    "components-switch": {
+      "id": "components-switch",
+      "name": "Switch",
+      "path": "./src/components/Switch/Switch.stories.tsx",
+      "jsDocTags": {},
+      "reactDocgen": {
+        "description": "",
+        "methods": [],
+        "displayName": "Switch",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/Switch/Switch.tsx",
+        "actualName": "Switch",
+        "exportName": "Switch",
+        "props": {
+          "label": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Figma: Show Text + Switch Text"
+          },
+          "description": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Figma: Show Description + Description Text"
+          },
+          "textPlacement": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'right' | 'left'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'right'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'left'"
+                }
+              ]
+            },
+            "description": "Figma property: Text Placement",
+            "defaultValue": {
+              "value": "'right'",
+              "computed": false
+            }
+          }
+        },
+        "composes": [
+          "Omit"
+        ]
+      },
+      "stories": [
+        {
+          "id": "components-switch--off",
+          "name": "Off",
+          "snippet": "const Off = () => <Switch label=\"Price alerts\" description=\"Notify me when the price drops.\" />;"
+        },
+        {
+          "id": "components-switch--on",
+          "name": "On",
+          "snippet": "const On = () => <Switch\n    label=\"Price alerts\"\n    description=\"Notify me when the price drops.\"\n    defaultChecked />;"
+        },
+        {
+          "id": "components-switch--text-left",
+          "name": "Text Left",
+          "snippet": "const TextLeft = () => <Switch\n    label=\"Price alerts\"\n    description=\"Notify me when the price drops.\"\n    defaultChecked\n    textPlacement=\"left\" />;"
+        },
+        {
+          "id": "components-switch--disabled",
+          "name": "Disabled",
+          "snippet": "const Disabled = () => <Switch\n    label=\"Price alerts\"\n    description=\"Notify me when the price drops.\"\n    defaultChecked\n    disabled />;"
+        },
+        {
+          "id": "components-switch--bare",
+          "name": "Bare",
+          "snippet": "const Bare = () => <Switch label={undefined} description={undefined} aria-label=\"Price alerts\" />;"
+        }
+      ],
+      "import": "import { Switch } from 'hobbyx-ds';"
+    },
+    "components-tabs": {
+      "id": "components-tabs",
+      "name": "Tabs",
+      "path": "./src/components/Tabs/Tabs.stories.tsx",
+      "jsDocTags": {},
+      "reactDocgen": {
+        "description": "",
+        "methods": [],
+        "displayName": "Tabs",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/Tabs/Tabs.tsx",
+        "actualName": "Tabs",
+        "exportName": "Tabs",
+        "props": {
+          "items": {
+            "required": true,
+            "tsType": {
+              "name": "Array",
+              "elements": [
+                {
+                  "name": "TabItem"
+                }
+              ],
+              "raw": "TabItem[]"
+            },
+            "description": ""
+          },
+          "value": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Controlled selected tab"
+          },
+          "defaultValue": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Selected tab on first render (uncontrolled)"
+          },
+          "onValueChange": {
+            "required": false,
+            "tsType": {
+              "name": "signature",
+              "type": "function",
+              "raw": "(value: string) => void",
+              "signature": {
+                "arguments": [
+                  {
+                    "type": {
+                      "name": "string"
+                    },
+                    "name": "value"
+                  }
+                ],
+                "return": {
+                  "name": "void"
+                }
+              }
+            },
+            "description": ""
+          },
+          "variant": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'main' | 'blur' | 'selected'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'main'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'blur'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'selected'"
+                }
+              ]
+            },
+            "description": "Figma Trigger property: Type (main / blur / Selected)",
+            "defaultValue": {
+              "value": "'main'",
+              "computed": false
+            }
+          },
+          "size": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'S' | 'M' | 'L'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'S'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'M'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'L'"
+                }
+              ]
+            },
+            "description": "Height: S 28 · M 32 · L 36. Figma property: Size",
+            "defaultValue": {
+              "value": "'M'",
+              "computed": false
+            }
+          },
+          "aria-label": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Accessible name of the tab list"
+          },
+          "className": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": ""
+          }
+        }
+      },
+      "stories": [
+        {
+          "id": "components-tabs--main",
+          "name": "Main",
+          "snippet": "const Main = () => <Tabs\n    aria-label=\"Marketplace\"\n    onValueChange={fn()}\n    items={[\n      { value: 'all', label: 'All' },\n      { value: 'auction', label: 'Auction' },\n      { value: 'raffles', label: 'Raffles' },\n      { value: 'live', label: 'Live' },\n      { value: 'rip', label: 'Rip & Ship' },\n    ]} />;"
+        },
+        {
+          "id": "components-tabs--blur",
+          "name": "Blur",
+          "snippet": "const Blur = () => <Tabs\n    aria-label=\"Marketplace\"\n    onValueChange={fn()}\n    items={[\n      { value: 'all', label: 'All' },\n      { value: 'auction', label: 'Auction' },\n      { value: 'raffles', label: 'Raffles' },\n      { value: 'live', label: 'Live' },\n      { value: 'rip', label: 'Rip & Ship' },\n    ]}\n    variant=\"blur\" />;"
+        },
+        {
+          "id": "components-tabs--selected",
+          "name": "Selected",
+          "snippet": "const Selected = () => <Tabs\n    aria-label=\"Marketplace\"\n    onValueChange={fn()}\n    items={[\n      { value: 'all', label: 'All' },\n      { value: 'auction', label: 'Auction' },\n      { value: 'raffles', label: 'Raffles' },\n      { value: 'live', label: 'Live' },\n      { value: 'rip', label: 'Rip & Ship' },\n    ]}\n    variant=\"selected\" />;"
+        },
+        {
+          "id": "components-tabs--with-icon",
+          "name": "With Icon",
+          "snippet": "const WithIcon = () => <Tabs\n    aria-label=\"Marketplace\"\n    onValueChange={fn()}\n    items={[{ value: 'hot', label: 'Trending', icon: <Flame /> }, { value: 'new', label: 'New' }, { value: 'ending', label: 'Ending soon' }]} />;"
+        },
+        {
+          "id": "components-tabs--all-sizes",
+          "name": "All Sizes",
+          "snippet": "const AllSizes = (args) => (\n  <div style={{ display: 'grid', gap: 16 }}>\n    {(['S', 'M', 'L'] as const).map((s) => <Tabs key={s} {...args} size={s} />)}\n  </div>\n);"
+        }
+      ],
+      "import": "import { Flame } from 'lucide-react';\nimport { Tabs } from 'hobbyx-ds';\nimport { fn } from 'storybook/test';"
+    },
+    "components-toast": {
+      "id": "components-toast",
+      "name": "Toast",
+      "path": "./src/components/Toast/Toast.stories.tsx",
+      "jsDocTags": {},
+      "reactDocgen": {
+        "description": "",
+        "methods": [],
+        "displayName": "Toast",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/Toast/Toast.tsx",
+        "actualName": "Toast",
+        "exportName": "Toast",
+        "props": {
+          "destructive": {
+            "required": false,
+            "tsType": {
+              "name": "boolean"
+            },
+            "description": "Figma property: Destructive",
+            "defaultValue": {
+              "value": "false",
+              "computed": false
+            }
+          },
+          "title": {
+            "required": false,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Figma: Show Title + Title Text"
+          },
+          "description": {
+            "required": false,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Figma: Show Description + Description Text"
+          },
+          "action": {
+            "required": false,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Figma: Show Button. E.g. an Undo link or a Ghost button."
+          },
+          "icon": {
+            "required": false,
+            "tsType": {
+              "name": "ReactNode"
+            },
+            "description": "Replaces the default circle icon"
+          }
+        },
+        "composes": [
+          "Omit"
+        ]
+      },
+      "stories": [
+        {
+          "id": "components-toast--default",
+          "name": "Default",
+          "snippet": "const Default = () => <Toast title=\"Removed from watchlist\" description=\"Charizard Base Set #4\" />;"
+        },
+        {
+          "id": "components-toast--with-undo",
+          "name": "With Undo",
+          "snippet": "const WithUndo = () => <Toast\n    title=\"Removed from watchlist\"\n    description=\"Charizard Base Set #4\"\n    action={<Button variant=\"link-accent\" size=\"xs\" leftIcon={<Undo2 />}>Undo</Button>} />;"
+        },
+        {
+          "id": "components-toast--destructive",
+          "name": "Destructive",
+          "snippet": "const Destructive = () => <Toast\n    title=\"Upload failed\"\n    description=\"Check your connection.\"\n    destructive\n    action={<Button variant=\"ghost\" size=\"sm\">Retry</Button>} />;"
+        },
+        {
+          "id": "components-toast--auto-close",
+          "name": "Auto Close",
+          "snippet": "const AutoClose = (args) => {\n  const [open, setOpen] = useState(false);\n  useEffect(() => {\n    if (!open) return;\n    const t = setTimeout(() => setOpen(false), 4000);\n    return () => clearTimeout(t);\n  }, [open]);\n  return (\n    <div style={{ display: 'grid', gap: 16, justifyItems: 'center' }}>\n      <Button size=\"sm\" variant=\"secondary\" onClick={() => setOpen(true)}>Remove from watchlist</Button>\n      {open && <Toast {...args} action={<Button variant=\"link-accent\" size=\"xs\" leftIcon={<Undo2 />} onClick={() => setOpen(false)}>Undo</Button>} />}\n    </div>\n  );\n};",
+          "description": "Click the button: the toast appears and closes itself after 4 s (HobbyX rule for undo toasts)."
+        }
+      ],
+      "import": "import { Button, Toast } from 'hobbyx-ds';\nimport { Undo2 } from 'lucide-react';\nimport { Button } from '../Button/Button';"
+    },
+    "patterns-marketplacecard": {
+      "id": "patterns-marketplacecard",
+      "name": "MarketplaceCard",
+      "path": "./src/components/MarketplaceCard/MarketplaceCard.stories.tsx",
+      "jsDocTags": {},
+      "reactDocgen": {
+        "description": "",
+        "methods": [],
+        "displayName": "MarketplaceCard",
+        "definedInFile": "/Users/aliniya/Projects/hobbyx-ds/src/components/MarketplaceCard/MarketplaceCard.tsx",
+        "actualName": "MarketplaceCard",
+        "exportName": "MarketplaceCard",
+        "props": {
+          "image": {
+            "required": true,
+            "tsType": {
+              "name": "string"
+            },
+            "description": ""
+          },
+          "title": {
+            "required": true,
+            "tsType": {
+              "name": "string"
+            },
+            "description": ""
+          },
+          "subtitle": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "e.g. \"Pokémon · PSA 8\""
+          },
+          "price": {
+            "required": true,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Formatted price, e.g. \"£3,200\""
+          },
+          "priceLabel": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Under the price: \"Current bid\", \"Starting price\"…"
+          },
+          "bids": {
+            "required": false,
+            "tsType": {
+              "name": "number"
+            },
+            "description": "Auction: number of bids next to the price"
+          },
+          "lastSale": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": ""
+          },
+          "predicted": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": ""
+          },
+          "trend": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'up' | 'down'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'up'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'down'"
+                }
+              ]
+            },
+            "description": "Arrow next to the predicted price"
+          },
+          "status": {
+            "required": false,
+            "tsType": {
+              "name": "signature",
+              "type": "object",
+              "raw": "{ label: string; color: BadgeColor }",
+              "signature": {
+                "properties": [
+                  {
+                    "key": "label",
+                    "value": {
+                      "name": "string",
+                      "required": true
+                    }
+                  },
+                  {
+                    "key": "color",
+                    "value": {
+                      "name": "union",
+                      "raw": "'green' | 'red' | 'yellow' | 'blue' | 'grey' | 'teal' | 'pink' | 'white' | 'blur'",
+                      "elements": [
+                        {
+                          "name": "literal",
+                          "value": "'green'"
+                        },
+                        {
+                          "name": "literal",
+                          "value": "'red'"
+                        },
+                        {
+                          "name": "literal",
+                          "value": "'yellow'"
+                        },
+                        {
+                          "name": "literal",
+                          "value": "'blue'"
+                        },
+                        {
+                          "name": "literal",
+                          "value": "'grey'"
+                        },
+                        {
+                          "name": "literal",
+                          "value": "'teal'"
+                        },
+                        {
+                          "name": "literal",
+                          "value": "'pink'"
+                        },
+                        {
+                          "name": "literal",
+                          "value": "'white'"
+                        },
+                        {
+                          "name": "literal",
+                          "value": "'blur'"
+                        }
+                      ],
+                      "required": true
+                    }
+                  }
+                ]
+              }
+            },
+            "description": "Top-left badge, e.g. { label: 'Ending soon', color: 'yellow' }"
+          },
+          "endsIn": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Bottom-left timer on the photo, e.g. \"Ends in 0h 38m\""
+          },
+          "collectionNote": {
+            "required": false,
+            "tsType": {
+              "name": "string"
+            },
+            "description": "Teal note at the bottom, e.g. \"Completes your Base Set\""
+          },
+          "saved": {
+            "required": false,
+            "tsType": {
+              "name": "boolean"
+            },
+            "description": "Heart button state",
+            "defaultValue": {
+              "value": "false",
+              "computed": false
+            }
+          },
+          "onToggleSave": {
+            "required": false,
+            "tsType": {
+              "name": "signature",
+              "type": "function",
+              "raw": "() => void",
+              "signature": {
+                "arguments": [],
+                "return": {
+                  "name": "void"
+                }
+              }
+            },
+            "description": ""
+          },
+          "bg": {
+            "required": false,
+            "tsType": {
+              "name": "union",
+              "raw": "'filled' | 'blur'",
+              "elements": [
+                {
+                  "name": "literal",
+                  "value": "'filled'"
+                },
+                {
+                  "name": "literal",
+                  "value": "'blur'"
+                }
+              ]
+            },
+            "description": "Figma property: BG (Filled / Blur)",
+            "defaultValue": {
+              "value": "'filled'",
+              "computed": false
+            }
+          }
+        },
+        "composes": [
+          "Omit"
+        ]
+      },
+      "stories": [
+        {
+          "id": "patterns-marketplacecard--fixed-price",
+          "name": "Fixed Price",
+          "snippet": "const FixedPrice = () => <MarketplaceCard\n    image={slab}\n    title=\"Teal Guardian Holo 1st Edition\"\n    subtitle=\"TCG · PSA 8\"\n    price=\"£320\"\n    lastSale=\"£295\"\n    predicted=\"£340\"\n    trend=\"up\"\n    collectionNote=\"Completes your 1st Edition set\" />;"
+        },
+        {
+          "id": "patterns-marketplacecard--auction-ending-soon",
+          "name": "Auction Ending Soon",
+          "snippet": "const AuctionEndingSoon = () => <MarketplaceCard\n    image={slab}\n    title=\"Teal Guardian Holo 1st Edition\"\n    subtitle=\"TCG · PSA 8\"\n    price=\"£3,200\"\n    lastSale=\"£3,200\"\n    predicted=\"£3,600\"\n    trend=\"up\"\n    status={{ label: 'Ending soon', color: 'yellow' }}\n    endsIn=\"Ends in 0h 38m\"\n    bids={14}\n    priceLabel=\"Current bid\" />;"
+        },
+        {
+          "id": "patterns-marketplacecard--live",
+          "name": "Live",
+          "snippet": "const Live = () => <MarketplaceCard\n    image={slab}\n    title=\"Teal Guardian Holo 1st Edition\"\n    subtitle=\"TCG · PSA 8\"\n    price=\"£320\"\n    lastSale=\"£295\"\n    predicted=\"£300\"\n    trend=\"down\"\n    status={{ label: 'Live', color: 'red' }}\n    bg=\"blur\"\n    priceLabel=\"Starting price\" />;"
+        },
+        {
+          "id": "patterns-marketplacecard--saveable",
+          "name": "Saveable",
+          "snippet": "const Saveable = () => {\n    const [saved, setSaved] = useState(false);\n\n    return (\n        <MarketplaceCard\n            image={slab}\n            title=\"Teal Guardian Holo 1st Edition\"\n            subtitle=\"TCG · PSA 8\"\n            price=\"£320\"\n            lastSale=\"£295\"\n            predicted=\"£340\"\n            trend=\"up\"\n            saved={saved}\n            onToggleSave={() => setSaved((s) => !s)} />\n    );\n};",
+          "description": "Heart toggles the saved state."
+        },
+        {
+          "id": "patterns-marketplacecard--marketplace-grid",
+          "name": "Marketplace Grid",
+          "snippet": "const MarketplaceGrid = () => <div style={{ width: 360, display: 'grid', gap: 16 }}>\n    <Tabs\n        aria-label=\"Marketplace\"\n        items={[{ value: 'all', label: 'All' }, { value: 'auction', label: 'Auction' }, { value: 'raffles', label: 'Raffles' }, { value: 'live', label: 'Live' }]} />\n    <div style={{ display: 'grid', gridTemplateColumns: '174px 174px', gap: 12 }}>\n        <MarketplaceCard\n            image={slab}\n            title=\"Teal Guardian Holo 1st Edition\"\n            subtitle=\"TCG · PSA 8\"\n            price=\"£320\"\n            lastSale=\"£295\"\n            predicted=\"£340\"\n            trend=\"up\"\n            {...AuctionEndingSoon.args} />\n        <MarketplaceCard\n            image={slab}\n            title=\"Teal Guardian Holo 1st Edition\"\n            subtitle=\"TCG · PSA 8\"\n            price=\"£320\"\n            lastSale=\"£295\"\n            predicted=\"£340\"\n            trend=\"up\"\n            collectionNote=\"Completes your 1st Edition set\" />\n        <MarketplaceCard\n            image={slab}\n            title=\"Teal Guardian Holo 1st Edition\"\n            subtitle=\"TCG · PSA 8\"\n            price=\"£320\"\n            lastSale=\"£295\"\n            predicted=\"£340\"\n            trend=\"up\"\n            {...Live.args} />\n        <div style={{ display: 'grid', gap: 8, alignContent: 'start', padding: 8 }}>\n            <Skeleton height={150} style={{ borderRadius: 12 }} />\n            <Skeleton width=\"85%\" height={14} />\n            <Skeleton width=\"50%\" height={12} />\n            <Skeleton width=\"40%\" height={16} />\n        </div>\n    </div>\n</div>;",
+          "description": "A small screen composed only from DS components: Tabs + cards + Skeleton while loading."
+        }
+      ],
+      "import": "import { MarketplaceCard, Skeleton, Tabs } from 'hobbyx-ds';\nimport slab from '../../assets/demo/card-slab.svg';"
+    }
+  },
+  "meta": {
+    "docgen": "react-docgen",
+    "durationMs": 176
+  }
+}

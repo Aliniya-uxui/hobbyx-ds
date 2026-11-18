@@ -1,0 +1,3681 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Components Manifest</title>
+  <style>
+      :root {
+          --bg: #0b0c10;
+          --panel: #121318;
+          --muted: #9aa0a6;
+          --fg: #e8eaed;
+          --ok: #22c55e;
+          --info: #1e88e5;
+          --err: #c62828;
+          --ok-bg: #0c1a13;
+          --info-bg: #0c1624;
+          --err-bg: #1a0e0e;
+          --chip: #1f2330;
+          --border: #2b2f3a;
+          --link: #8ab4f8;
+          --active-ring: 1px; /* 1px active ring for pills and toggles */
+      }
+
+      * {
+          box-sizing: border-box;
+      }
+
+      html,
+      body {
+          margin: 0;
+          background: var(--bg);
+          color: var(--fg);
+          font: 14px/1.5 system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Ubuntu,
+          Cantarell,
+          'Helvetica Neue',
+          Arial,
+          'Noto Sans';
+      }
+
+      .wrap {
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 16px 20px;
+      }
+
+      header {
+          position: sticky;
+          top: 0;
+          backdrop-filter: blur(6px);
+          background: color-mix(in srgb, var(--bg) 84%, transparent);
+          border-bottom: 1px solid var(--border);
+          z-index: 10;
+      }
+
+      h1 {
+          font-size: 20px;
+          margin: 0 0 6px;
+      }
+
+      .summary {
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+          align-items: center;
+      }
+
+      /* Top filter pills */
+      .filter-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 6px 12px;
+          border: 1px solid var(--border);
+          border-radius: 999px;
+          background: var(--panel);
+          text-decoration: none;
+          cursor: pointer;
+          user-select: none;
+          color: var(--fg);
+      }
+
+      .filter-pill.ok {
+          color: #b9f6ca;
+          border-color: color-mix(in srgb, var(--ok) 55%, var(--border));
+          background: color-mix(in srgb, var(--ok) 18%, #000);
+      }
+
+      .filter-pill.info {
+          color: #b3d9ff;
+          border-color: color-mix(in srgb, var(--info) 55%, var(--border));
+          background: var(--info-bg);
+      }
+
+      .filter-pill.err {
+          color: #ff9aa0;
+          border-color: color-mix(in srgb, var(--err) 55%, var(--border));
+          background: var(--err-bg);
+      }
+
+      .filter-pill.all {
+          color: #d7dbe0;
+          border-color: var(--border);
+          background: var(--panel);
+      }
+
+      .filter-pill[aria-disabled='true'] {
+          cursor: default;
+          text-decoration: none;
+      }
+
+      .filter-pill:focus,
+      .filter-pill:active {
+          outline: none;
+          box-shadow: none;
+      }
+
+      /* Selected top pill ring via :target */
+      #filter-all:target ~ header .filter-pill[data-k='all'],
+      #filter-errors:target ~ header .filter-pill[data-k='errors'],
+      #filter-infos:target ~ header .filter-pill[data-k='infos'],
+      #filter-story-errors:target ~ header .filter-pill[data-k='story-errors'],
+      #filter-story-warnings:target ~ header .filter-pill[data-k='story-warnings'],
+      #filter-no-api:target ~ header .filter-pill[data-k='no-api'],
+      #filter-doc-errors:target ~ header .filter-pill[data-k='docs'],
+      #filter-docs:target ~ header .filter-pill[data-k='docs'] {
+          box-shadow: 0 0 0 var(--active-ring) currentColor;
+          border-color: currentColor;
+      }
+
+      /* Hidden targets for filtering */
+      #filter-all,
+      #filter-errors,
+      #filter-infos,
+      #filter-story-errors,
+      #filter-story-warnings,
+      #filter-no-api,
+      #filter-doc-errors,
+      #filter-docs {
+          display: none;
+      }
+
+      main {
+          padding: 36px 0 40px;
+      }
+
+      .grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 18px;
+      }
+
+      /* one card per row */
+
+      .card {
+          border: 1px solid var(--border);
+          background: var(--panel);
+          border-radius: 14px;
+          padding: 14px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          /* Keep a deep-linked card clear of the sticky header when scrolled into view */
+          scroll-margin-top: 110px;
+      }
+
+      /* Highlight the card deep-linked via components.html#<manifest-id> */
+      .card:target {
+          box-shadow: 0 0 0 2px var(--info);
+          border-color: var(--info);
+      }
+
+      .head {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+      }
+
+      .title {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+      }
+
+      .title h2 {
+          font-size: 16px;
+          margin: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+      }
+
+      .meta {
+          font-size: 12px;
+          color: var(--muted);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+      }
+
+      .kv {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+      }
+
+      .chip {
+          font-size: 12px;
+          padding: 4px 8px;
+          border-radius: 999px;
+          background: var(--chip);
+          border: 1px solid var(--border);
+      }
+
+      .hint {
+          color: var(--muted);
+          font-size: 12px;
+      }
+
+      .badges {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+      }
+
+      /* Per-card badges: labels become toggles when clickable */
+      .badge {
+          font-size: 12px;
+          padding: 3px 8px;
+          border-radius: 999px;
+          border: 1px solid var(--border);
+          background: var(--chip);
+          color: #d7dbe0;
+      }
+
+      .badge.ok {
+          color: #b9f6ca;
+          border-color: color-mix(in srgb, var(--ok) 55%, var(--border));
+      }
+
+      .badge.info {
+          color: #b3d9ff;
+          border-color: color-mix(in srgb, var(--info) 55%, var(--border));
+      }
+
+      .badge.err {
+          color: #ff9aa0;
+          border-color: color-mix(in srgb, var(--err) 55%, var(--border));
+      }
+
+      .snippet-warning {
+          margin-top: 8px;
+          padding: 8px 10px;
+          border-radius: 8px;
+          border: 1px solid color-mix(in srgb, var(--info) 45%, var(--border));
+          background: var(--info-bg);
+          color: #b3d9ff;
+          font-size: 12px;
+      }
+
+      .as-toggle {
+          cursor: pointer;
+      }
+
+      /* 1px ring on active toggle */
+      .tg-err:checked + label.as-toggle,
+      .tg-info:checked + label.as-toggle,
+      .tg-stories:checked + label.as-toggle,
+      .tg-docs:checked + label.as-toggle,
+      .tg-subcomponents:checked + label.as-toggle,
+      .tg-content:checked + label.as-toggle,
+      .tg-props:checked + label.as-toggle {
+          box-shadow: 0 0 0 var(--active-ring) currentColor;
+          border-color: currentColor;
+      }
+
+      /* Panels: hidden by default, shown when respective toggle checked */
+      .panels {
+          display: grid;
+          gap: 10px;
+      }
+
+      .panel {
+          display: none;
+      }
+
+      .tg-err:checked ~ .panels .panel-err {
+          display: grid;
+      }
+
+      .tg-info:checked ~ .panels .panel-info {
+          display: grid;
+          gap: 8px;
+      }
+
+      .tg-stories:checked ~ .panels .panel-stories {
+          display: grid;
+          gap: 8px;
+      }
+
+      .tg-docs:checked ~ .panels .panel-docs {
+          display: grid;
+          gap: 8px;
+      }
+
+      .tg-subcomponents:checked ~ .panels .panel-subcomponents {
+          display: grid;
+          gap: 8px;
+      }
+
+      .tg-content:checked ~ .panels .panel-content {
+          display: grid;
+          gap: 8px;
+      }
+
+      .tg-props:checked ~ .panels .panel-props {
+          display: grid;
+      }
+
+      /* Colored notes for API error + info */
+      .note {
+          padding: 12px;
+          border: 1px solid var(--border);
+          border-radius: 10px;
+      }
+
+      .note.err {
+          border-color: color-mix(in srgb, var(--err) 55%, var(--border));
+          background: var(--err-bg);
+          color: #ffd1d4;
+      }
+
+      .note.info {
+          border-color: color-mix(in srgb, var(--info) 55%, var(--border));
+          background: var(--info-bg);
+          color: #d6e8ff;
+      }
+
+      .note.ok {
+          border-color: color-mix(in srgb, var(--ok) 55%, var(--border));
+          background: var(--ok-bg);
+          color: var(--fg);
+      }
+
+      .note-title {
+          font-weight: 600;
+          margin-bottom: 6px;
+      }
+
+      .note-body {
+          white-space: normal;
+      }
+
+      /* Story error cards */
+      .ex {
+          padding: 10px;
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          background: #0f131b;
+      }
+
+      .ex.err {
+          border-color: color-mix(in srgb, var(--err) 55%, var(--border));
+      }
+
+      .row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+      }
+
+      .status-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          display: inline-block;
+      }
+
+      .dot-ok {
+          background: var(--ok);
+      }
+
+      .dot-err {
+          background: var(--err);
+      }
+
+      .ex-name {
+          font-weight: 600;
+      }
+
+      /* Error groups (visible in errors filter) */
+      .error-groups {
+          display: none;
+          margin-bottom: 16px;
+      }
+
+      .group {
+          border: 1px solid var(--border);
+          background: var(--panel);
+          border-radius: 14px;
+          overflow: hidden;
+      }
+
+      .group + .group {
+          margin-top: 12px;
+      }
+
+      .group-header {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 12px 14px;
+          cursor: pointer;
+          border-bottom: 1px solid var(--border);
+      }
+
+      .group-header:hover {
+          background: #141722;
+      }
+
+      .group-title {
+          font-weight: 600;
+          flex: 1;
+      }
+
+      .group-count {
+          font-size: 12px;
+          color: var(--muted);
+      }
+
+      .group-cards {
+          display: none;
+          padding: 12px;
+      }
+
+      .group .card {
+          margin: 12px 0;
+      }
+
+      .group .card:first-child {
+          margin-top: 0;
+      }
+
+      .group .card:last-child {
+          margin-bottom: 0;
+      }
+
+      /* caret rotation */
+      .group-tg:checked + label .caret {
+          transform: rotate(90deg);
+      }
+
+      .caret {
+          transition: transform 0.15s ease;
+      }
+
+      /* toggle body */
+      .group-tg:checked ~ .group-cards {
+          display: block;
+      }
+
+      /* CSS-only filtering of cards via top pills */
+      #filter-errors:target ~ main .card:not(.has-error):not(.has-story-error) {
+          display: none;
+      }
+
+      #filter-infos:target ~ main .card:not(.has-info) {
+          display: none;
+      }
+
+      #filter-story-errors:target ~ main .card:not(.has-story-error) {
+          display: none;
+      }
+
+      #filter-story-warnings:target ~ main .card:not(.has-story-warning) {
+          display: none;
+      }
+
+      #filter-no-api:target ~ main .card:not(.missing-api) {
+          display: none;
+      }
+
+      #filter-doc-errors:target ~ main .card:not(.has-doc-error) {
+          display: none;
+      }
+
+      #filter-docs:target ~ main .card:has(> .tg-docs),
+      #filter-docs:target ~ main .card.is-doc {
+          display: block;
+      }
+
+      #filter-docs:target ~ main .card:not(:has(> .tg-docs)):not(.is-doc) {
+          display: none;
+      }
+
+      #filter-all:target ~ main .card {
+          display: block;
+      }
+
+      /* In errors view, hide standalone component-error cards in the regular grid (they will appear in groups) */
+      #filter-errors:target ~ main .grid .card.has-error {
+          display: none;
+      }
+
+      /* Show grouped section only in errors view */
+      #filter-errors:target ~ main .error-groups {
+          display: block;
+      }
+
+      /* Section titles */
+      .section-title {
+          font-size: 16px;
+          font-weight: 600;
+          color: var(--muted);
+          margin: 24px 0 12px;
+          padding-bottom: 8px;
+          border-bottom: 1px solid var(--border);
+      }
+      .section-title:first-child {
+          margin-top: 0;
+      }
+
+      /* When a toggle is checked, show the corresponding panel */
+      .card > .tg-err:checked ~ .panels .panel-err {
+          display: grid;
+      }
+      
+      .card > .tg-info:checked ~ .panels .panel-info {
+          display: grid;
+      }
+      
+      .card > .tg-stories:checked ~ .panels .panel-stories {
+          display: grid;
+      }
+
+      .card > .tg-docs:checked ~ .panels .panel-docs {
+          display: grid;
+      }
+
+      .card > .tg-subcomponents:checked ~ .panels .panel-subcomponents {
+          display: grid;
+      }
+
+      .card > .tg-content:checked ~ .panels .panel-content {
+          display: grid;
+      }
+
+      /* Add vertical spacing around panels only when any panel is visible */
+      .card > .tg-err:checked ~ .panels,
+      .card > .tg-info:checked ~ .panels,
+      .card > .tg-stories:checked ~ .panels,
+      .card > .tg-docs:checked ~ .panels,
+      .card > .tg-subcomponents:checked ~ .panels,
+      .card > .tg-content:checked ~ .panels,
+      .card > .tg-props:checked ~ .panels {
+          margin: 10px 0;
+      }
+
+      /* Optional: a subtle 1px ring on the active badge, using :has() if available */
+      @supports selector(.card:has(.tg-err:checked)) {
+          .card:has(.tg-err:checked) label[for$='-err'],
+          .card:has(.tg-info:checked) label[for$='-info'],
+          .card:has(.tg-stories:checked) label[for$='-stories'],
+          .card:has(.tg-docs:checked) label[for$='-docs'],
+          .card:has(.tg-subcomponents:checked) label[for$='-subcomponents'],
+          .card:has(.tg-content:checked) label[for$='-content'],
+          .card:has(.tg-props:checked) label[for$='-props'] {
+              box-shadow: 0 0 0 1px currentColor;
+              border-color: currentColor;
+          }
+      }
+
+      /* Wrap long lines in code blocks at ~120 characters */
+      pre, code {
+          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      }
+      pre {
+          white-space: pre-wrap;
+          overflow-wrap: anywhere;
+          word-break: break-word;
+          overflow-x: auto; /* fallback for extremely long tokens */
+          margin: 8px 0 0;
+      }
+      pre > code {
+          display: block;
+          white-space: inherit;
+          overflow-wrap: inherit;
+          word-break: inherit;
+          inline-size: min(100%, 120ch);
+      }
+
+      /* MDX content container for docs */
+      .mdx-content {
+          background: #0f131b;
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          padding: 12px;
+          max-height: 400px;
+          overflow-y: auto;
+          margin-top: 8px;
+      }
+  </style>
+</head>
+<body>
+<!-- Hidden targets for the top-level filters -->
+<span id="filter-all"></span>
+<span id="filter-errors"></span>
+<span id="filter-infos"></span>
+<span id="filter-story-errors"></span>
+<span id="filter-story-warnings"></span>
+<span id="filter-no-api"></span>
+<span id="filter-doc-errors"></span>
+<span id="filter-docs"></span>
+<header>
+  <div class="wrap">
+    <h1>Manifest Debugger</h1>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">16 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">13/16 infos</a><a class="filter-pill" data-k="no-api" href="#filter-no-api">1/16 without API description</a><span class="filter-pill ok" aria-disabled="true">86 stories ok</span><a class="filter-pill ok" data-k="docs" href="#filter-docs">4 docs ok</a></div>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    <div class="note info" style="margin-bottom: 16px;">
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>0.2s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <pre><code>typescript: {
+  reactDocgen: 'react-docgen-typescript',
+}</code></pre>
+            Note: <code>react-docgen-typescript</code> can be slower. If performance is acceptable for your project, it generally produces better results.
+            <a href="https://storybook.js.org/docs/api/main-config/main-config-typescript#reactdocgen" target="_blank">Learn more</a>
+          </div>
+    <h2 class="section-title">Components</h2>
+    <div class="grid" role="list">
+      
+<article
+  id="components-alert"
+  class="card 
+  no-error
+  has-info
+  no-story-error
+  no-story-warning
+  
+  no-doc-error"
+  role="listitem"
+  aria-label="Alert">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Alert</h2>
+      <div class="badges">
+        <label for="c-0-components-alert-props" class="badge ok as-toggle">6 prop types</label>
+        <label for="c-0-components-alert-info" class="badge info as-toggle">1 info</label>
+        <label for="c-0-components-alert-stories" class="badge ok as-toggle">6 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/Alert/Alert.stories.tsx">components-alert · ./src/components/Alert/Alert.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-0-components-alert-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-0-components-alert-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  <input id="c-0-components-alert-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">6 prop types</span>
+            </div>
+            <pre><code>Component: src/components/Alert/Alert.tsx::Alert</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Figma: Button. A Button or link shown under the text.
+ */
+action?: ReactNode
+
+/**
+ * Figma: Description + Description Text
+ */
+description?: ReactNode
+
+/**
+ * Replaces the default icon (Info, or CircleAlert for destructive)
+ */
+icon?: ReactNode
+
+/**
+ * Padding &amp; text: L 16 · S 12 · xs 10. Figma property: Size
+ */
+size?: &#39;L&#39; | &#39;S&#39; | &#39;xs&#39; = &#39;L&#39;
+
+/**
+ * Figma: Title Text
+ */
+title: ReactNode
+
+/**
+ * Figma property: Variant (Default / Destructive / bg blur)
+ */
+variant?: &#39;default&#39; | &#39;destructive&#39; | &#39;blur&#39; = &#39;default&#39;</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Alert, Button } from 'hobbyx-ds';
+import { Button } from '../Button/Button';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Default = () =&gt; &lt;Alert
+    title=&quot;Price updated&quot;
+    description=&quot;Market value was recalculated from 12 recent sales.&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Destructive</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Destructive = () =&gt; &lt;Alert
+    title=&quot;Payment failed&quot;
+    description=&quot;Your card was declined. Try another payment method.&quot;
+    variant=&quot;destructive&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Blur</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Blur = () =&gt; &lt;Alert
+    title=&quot;Price updated&quot;
+    description=&quot;Market value was recalculated from 12 recent sales.&quot;
+    variant=&quot;blur&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">With Action</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const WithAction = () =&gt; &lt;Alert
+    title=&quot;Price updated&quot;
+    description=&quot;Market value was recalculated from 12 recent sales.&quot;
+    action={&lt;Button size=&quot;xs&quot; variant=&quot;secondary&quot;&gt;View sales&lt;/Button&gt;} /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Title Only</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const TitleOnly = () =&gt; &lt;Alert title=&quot;Price updated&quot; description={undefined} /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">All Sizes</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const AllSizes = (args) =&gt; (
+  &lt;div style={{ display: &#39;grid&#39;, gap: 12 }}&gt;
+    {([&#39;L&#39;, &#39;S&#39;, &#39;xs&#39;] as const).map((s) =&gt; &lt;Alert key={s} {...args} size={s} /&gt;)}
+  &lt;/div&gt;
+);</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+<article
+  id="components-avatar"
+  class="card 
+  no-error
+  has-info
+  no-story-error
+  no-story-warning
+  
+  no-doc-error"
+  role="listitem"
+  aria-label="Avatar">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Avatar</h2>
+      <div class="badges">
+        <label for="c-1-components-avatar-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-1-components-avatar-info" class="badge info as-toggle">1 info</label>
+        <label for="c-1-components-avatar-stories" class="badge ok as-toggle">7 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/Avatar/Avatar.stories.tsx">components-avatar · ./src/components/Avatar/Avatar.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-1-components-avatar-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-1-components-avatar-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  <input id="c-1-components-avatar-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">4 prop types</span>
+            </div>
+            <pre><code>Component: src/components/Avatar/Avatar.tsx::Avatar</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Used for alt text and initials. Figma Type=Text
+ */
+name?: string
+
+/**
+ * xl 40 · lg 36 · md 32 · xs 24 · xxs 16. Figma property: Size
+ */
+size?: &#39;xl&#39; | &#39;lg&#39; | &#39;md&#39; | &#39;xs&#39; | &#39;xxs&#39; = &#39;xl&#39;
+
+/**
+ * Photo URL. Figma Type=Image
+ */
+src?: string
+
+/**
+ * Blue check in the corner. Figma property: Indicator = Verification
+ */
+verified?: boolean = false</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Avatar, AvatarGroup } from 'hobbyx-ds';
+import photo from '../../assets/demo/avatar.svg';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Image</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Image = () =&gt; &lt;Avatar src={photo} name=&quot;Alex Lee&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Initials</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Initials = () =&gt; &lt;Avatar src={undefined} name=&quot;Alex Lee&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Placeholder</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Placeholder = () =&gt; &lt;Avatar src={undefined} name={undefined} /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Verified</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Verified = () =&gt; &lt;Avatar src={photo} name=&quot;Alex Lee&quot; verified /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Broken Image</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">A broken photo URL falls back to initials.</div>
+              <pre><code>const BrokenImage = () =&gt; &lt;Avatar src=&quot;/missing.png&quot; name=&quot;Alex Lee&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">All Sizes</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const AllSizes = (args) =&gt; (
+  &lt;div style={{ display: &#39;grid&#39;, gap: 16 }}&gt;
+    {[{ src: args.src }, { src: undefined }, { src: undefined, name: undefined }, { verified: true }].map((p, row) =&gt; (
+      &lt;div key={row} style={{ display: &#39;flex&#39;, gap: 16, alignItems: &#39;center&#39; }}&gt;
+        {sizes.map((s) =&gt; &lt;Avatar key={s} {...args} {...p} size={s} /&gt;)}
+      &lt;/div&gt;
+    ))}
+  &lt;/div&gt;
+);</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Group</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Group = () =&gt; (
+  &lt;AvatarGroup&gt;
+    &lt;Avatar src={photo} name=&quot;Alex Lee&quot; size=&quot;md&quot; /&gt;
+    &lt;Avatar src={photo2} name=&quot;Mia Park&quot; size=&quot;md&quot; /&gt;
+    &lt;Avatar name=&quot;Sam Cole&quot; size=&quot;md&quot; /&gt;
+    &lt;Avatar size=&quot;md&quot; /&gt;
+  &lt;/AvatarGroup&gt;
+);</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+<article
+  id="components-badge"
+  class="card 
+  no-error
+  no-info
+  no-story-error
+  no-story-warning
+  
+  no-doc-error"
+  role="listitem"
+  aria-label="Badge">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Badge</h2>
+      <div class="badges">
+        <label for="c-2-components-badge-props" class="badge ok as-toggle">7 prop types</label>
+        
+        <label for="c-2-components-badge-stories" class="badge ok as-toggle">7 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/Badge/Badge.stories.tsx">components-badge · ./src/components/Badge/Badge.stories.tsx</div>
+    
+    <div class="hint">Short status label: &quot;Live&quot;, &quot;+12%&quot;, &quot;Sold&quot;. Not clickable.</div>
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  
+  <input id="c-2-components-badge-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  <input id="c-2-components-badge-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">7 prop types</span>
+            </div>
+            <pre><code>Component: src/components/Badge/Badge.tsx::Badge</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>children: ReactNode
+
+/**
+ * Figma property: color
+ */
+color?: &#39;green&#39; | &#39;red&#39; | &#39;yellow&#39; | &#39;blue&#39; | &#39;grey&#39; | &#39;teal&#39; | &#39;pink&#39; | &#39;white&#39; | &#39;blur&#39; = &#39;green&#39;
+
+/**
+ * Small dot before the text. Figma property: dot
+ */
+dot?: boolean = false
+
+/**
+ * Figma: icon left
+ */
+leftIcon?: ReactNode
+
+/**
+ * Figma: icon right
+ */
+rightIcon?: ReactNode
+
+/**
+ * Height: L 32 · M 24 · S 22. Figma property: size
+ */
+size?: &#39;L&#39; | &#39;M&#39; | &#39;S&#39; = &#39;M&#39;
+
+/**
+ * Figma property: type. The `blur` colour exists only as type blur.
+ */
+type?: &#39;blur&#39; | &#39;filled&#39; = &#39;blur&#39;</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Badge } from 'hobbyx-ds';
+import { TrendingUp } from 'lucide-react';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Blur</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Blur = () =&gt; &lt;Badge&gt;Badge&lt;/Badge&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Filled</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Filled = () =&gt; &lt;Badge type=&quot;filled&quot;&gt;Badge&lt;/Badge&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">With Icon</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const WithIcon = () =&gt; &lt;Badge leftIcon={&lt;TrendingUp /&gt;}&gt;+12%&lt;/Badge&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">With Dot</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const WithDot = () =&gt; &lt;Badge color=&quot;red&quot; dot&gt;Live&lt;/Badge&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Sold</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Sold = () =&gt; &lt;Badge type=&quot;filled&quot; color=&quot;grey&quot; size=&quot;S&quot;&gt;Sold&lt;/Badge&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">All Colors</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const AllColors = (args) =&gt; (
+  &lt;div style={{ display: &#39;grid&#39;, gap: 12 }}&gt;
+    {([&#39;blur&#39;, &#39;filled&#39;] as const).map((type) =&gt; (
+      &lt;div key={type} style={{ display: &#39;flex&#39;, gap: 8 }}&gt;
+        {colors.map((c) =&gt; (
+          &lt;Badge key={c} {...args} color={c} type={type}&gt;{c}&lt;/Badge&gt;
+        ))}
+      &lt;/div&gt;
+    ))}
+  &lt;/div&gt;
+);</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">All Sizes</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const AllSizes = (args) =&gt; (
+  &lt;div style={{ display: &#39;flex&#39;, gap: 8, alignItems: &#39;center&#39; }}&gt;
+    {([&#39;L&#39;, &#39;M&#39;, &#39;S&#39;] as const).map((s) =&gt; (
+      &lt;Badge key={s} {...args} size={s} leftIcon={&lt;TrendingUp /&gt;}&gt;Size {s}&lt;/Badge&gt;
+    ))}
+  &lt;/div&gt;
+);</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+<article
+  id="components-button"
+  class="card 
+  no-error
+  no-info
+  no-story-error
+  no-story-warning
+  
+  no-doc-error"
+  role="listitem"
+  aria-label="Button">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Button</h2>
+      <div class="badges">
+        <label for="c-3-components-button-props" class="badge ok as-toggle">6 prop types</label>
+        
+        <label for="c-3-components-button-stories" class="badge ok as-toggle">10 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/Button/Button.stories.tsx">components-button · ./src/components/Button/Button.stories.tsx</div>
+    
+    <div class="hint">Main action button of HobbyX.
+States (Hover, Pressed, Focused, Disabled) are not props: the browser applies them
+on mouse over, click, keyboard focus and the `disabled` attribute.</div>
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  
+  <input id="c-3-components-button-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  <input id="c-3-components-button-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">6 prop types</span>
+            </div>
+            <pre><code>Component: src/components/Button/Button.tsx::Button</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Button text. Figma property: Button Text
+ */
+children: ReactNode
+
+/**
+ * Icon before the text. Figma: Show Left Icon + Left Icon
+ */
+leftIcon?: ReactNode
+
+/**
+ * Icon after the text. Figma: Show Right Icon + Right Icon
+ */
+rightIcon?: ReactNode
+
+/**
+ * Height: lg 56 · default 44 · sm 36 · xs 26. Figma property: Size
+ */
+size?: &#39;lg&#39; | &#39;default&#39; | &#39;sm&#39; | &#39;xs&#39; = &#39;lg&#39;
+
+type?: any = &#39;button&#39;
+
+/**
+ * Visual style. Figma property: Variant
+ */
+variant?: | &#39;primary&#39;
+| &#39;secondary&#39;
+| &#39;destructive&#39;
+| &#39;ghost&#39;
+| &#39;tinted&#39;
+| &#39;link&#39;
+| &#39;link-accent&#39;
+| &#39;link-destructive&#39; = &#39;primary&#39;</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { ArrowRight, Gavel, Trash2 } from 'lucide-react';
+import { Button } from 'hobbyx-ds';
+import { fn } from 'storybook/test';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Primary</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Primary = () =&gt; &lt;Button onClick={fn()}&gt;Place bid&lt;/Button&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Secondary</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Secondary = () =&gt; &lt;Button onClick={fn()} variant=&quot;secondary&quot;&gt;Make offer&lt;/Button&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Destructive</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Destructive = () =&gt; &lt;Button onClick={fn()} variant=&quot;destructive&quot;&gt;Delete listing&lt;/Button&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Ghost</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Ghost = () =&gt; &lt;Button onClick={fn()} variant=&quot;ghost&quot;&gt;Cancel&lt;/Button&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Tinted</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Tinted = () =&gt; &lt;Button onClick={fn()} variant=&quot;tinted&quot;&gt;Filters&lt;/Button&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Link</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Link = () =&gt; &lt;Button onClick={fn()} variant=&quot;link&quot;&gt;View all&lt;/Button&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">With Icons</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const WithIcons = () =&gt; &lt;Button onClick={fn()} leftIcon={&lt;Gavel /&gt;} rightIcon={&lt;ArrowRight /&gt;}&gt;Place bid&lt;/Button&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Disabled</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Disabled = () =&gt; &lt;Button onClick={fn()} disabled&gt;Place bid&lt;/Button&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">All Sizes</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const AllSizes = (args) =&gt; (
+  &lt;div style={{ display: &#39;flex&#39;, gap: 16, alignItems: &#39;center&#39; }}&gt;
+    {([&#39;lg&#39;, &#39;default&#39;, &#39;sm&#39;, &#39;xs&#39;] as const).map((size) =&gt; (
+      &lt;Button key={size} {...args} size={size} leftIcon={&lt;Gavel /&gt;}&gt;{size}&lt;/Button&gt;
+    ))}
+  &lt;/div&gt;
+);</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">All Variants</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const AllVariants = (args) =&gt; (
+  &lt;div style={{ display: &#39;grid&#39;, gridTemplateColumns: &#39;repeat(4, auto)&#39;, gap: 16, alignItems: &#39;center&#39; }}&gt;
+    {([&#39;primary&#39;, &#39;secondary&#39;, &#39;destructive&#39;, &#39;ghost&#39;, &#39;tinted&#39;, &#39;link&#39;, &#39;link-accent&#39;, &#39;link-destructive&#39;] as const).map((v) =&gt; (
+      &lt;Button key={v} {...args} variant={v} leftIcon={v === &#39;destructive&#39; ? &lt;Trash2 /&gt; : undefined}&gt;{v}&lt;/Button&gt;
+    ))}
+  &lt;/div&gt;
+);</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+<article
+  id="components-checkbox"
+  class="card 
+  no-error
+  has-info
+  no-story-error
+  no-story-warning
+  
+  no-doc-error"
+  role="listitem"
+  aria-label="Checkbox">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Checkbox</h2>
+      <div class="badges">
+        <label for="c-4-components-checkbox-props" class="badge ok as-toggle">3 prop types</label>
+        <label for="c-4-components-checkbox-info" class="badge info as-toggle">1 info</label>
+        <label for="c-4-components-checkbox-stories" class="badge ok as-toggle">5 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/Checkbox/Checkbox.stories.tsx">components-checkbox · ./src/components/Checkbox/Checkbox.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-4-components-checkbox-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-4-components-checkbox-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  <input id="c-4-components-checkbox-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">3 prop types</span>
+            </div>
+            <pre><code>Component: src/components/Checkbox/Checkbox.tsx::Checkbox</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Figma: Show Description + Description Text
+ */
+description?: string
+
+/**
+ * Figma: Show Text + Label Text
+ */
+label?: string
+
+/**
+ * Label text size: L 16 · S 14. Figma property: Size
+ */
+size?: &#39;L&#39; | &#39;S&#39; = &#39;L&#39;</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Checkbox } from 'hobbyx-ds';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Default = () =&gt; &lt;Checkbox label=&quot;Graded cards only&quot; description=&quot;Hide raw cards from the results.&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Checked</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Checked = () =&gt; &lt;Checkbox
+    label=&quot;Graded cards only&quot;
+    description=&quot;Hide raw cards from the results.&quot;
+    defaultChecked /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Small</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Small = () =&gt; &lt;Checkbox
+    label=&quot;Graded cards only&quot;
+    description=&quot;Hide raw cards from the results.&quot;
+    size=&quot;S&quot;
+    defaultChecked /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Label Only</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const LabelOnly = () =&gt; &lt;Checkbox label=&quot;Graded cards only&quot; description={undefined} /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">All States</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const AllStates = () =&gt; &lt;div
+    style={{ display: &#39;grid&#39;, gridTemplateColumns: &#39;repeat(2, auto)&#39;, gap: 24 }}&gt;
+    &lt;Checkbox label=&quot;Graded cards only&quot; description=&quot;Hide raw cards from the results.&quot; /&gt;
+    &lt;Checkbox
+        label=&quot;Graded cards only&quot;
+        description=&quot;Hide raw cards from the results.&quot;
+        disabled /&gt;
+    &lt;Checkbox
+        label=&quot;Graded cards only&quot;
+        description=&quot;Hide raw cards from the results.&quot;
+        defaultChecked /&gt;
+    &lt;Checkbox
+        label=&quot;Graded cards only&quot;
+        description=&quot;Hide raw cards from the results.&quot;
+        defaultChecked
+        disabled /&gt;
+&lt;/div&gt;;</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+<article
+  id="components-emptystate"
+  class="card 
+  no-error
+  has-info
+  no-story-error
+  no-story-warning
+  
+  no-doc-error"
+  role="listitem"
+  aria-label="EmptyState">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> EmptyState</h2>
+      <div class="badges">
+        <label for="c-5-components-emptystate-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-5-components-emptystate-info" class="badge info as-toggle">1 info</label>
+        <label for="c-5-components-emptystate-stories" class="badge ok as-toggle">4 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/EmptyState/EmptyState.stories.tsx">components-emptystate · ./src/components/EmptyState/EmptyState.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-5-components-emptystate-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-5-components-emptystate-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  <input id="c-5-components-emptystate-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">4 prop types</span>
+            </div>
+            <pre><code>Component: src/components/EmptyState/EmptyState.tsx::EmptyState</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Buttons, stacked, 180 wide
+ */
+actions?: ReactNode
+
+description?: ReactNode
+
+/**
+ * Glyph type of the StatusIcon on top
+ */
+icon?: &#39;success&#39; | &#39;failed&#39; | &#39;warning&#39; | &#39;neutral&#39; = &#39;neutral&#39;
+
+title: ReactNode</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Button, EmptyState } from 'hobbyx-ds';
+import { Button } from '../Button/Button';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Default = () =&gt; &lt;EmptyState
+    title=&quot;Start a conversation&quot;
+    description=&quot;Connect with people on Hobby Index and your conversations will appear here.&quot;
+    actions={&lt;Button size=&quot;default&quot;&gt;New message&lt;/Button&gt;} /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">No Results</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const NoResults = () =&gt; &lt;EmptyState
+    title=&quot;No cards found&quot;
+    description=&quot;Try another name or remove some filters.&quot;
+    actions={(&lt;&gt;
+      &lt;Button size=&quot;default&quot;&gt;Clear filters&lt;/Button&gt;
+      &lt;Button size=&quot;default&quot; variant=&quot;ghost&quot;&gt;Back to marketplace&lt;/Button&gt;
+    &lt;/&gt;)} /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Success</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Success = () =&gt; &lt;EmptyState
+    title=&quot;Listing published&quot;
+    description=&quot;Buyers can now see your card in the marketplace.&quot;
+    icon=&quot;success&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Failed</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Failed = () =&gt; &lt;EmptyState
+    title=&quot;Scan failed&quot;
+    description=&quot;We could not read the card. Retake the photo in good light.&quot;
+    icon=&quot;failed&quot;
+    actions={&lt;Button size=&quot;default&quot;&gt;Try again&lt;/Button&gt;} /&gt;;</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+<article
+  id="components-iconbutton"
+  class="card 
+  no-error
+  has-info
+  no-story-error
+  no-story-warning
+  
+  no-doc-error"
+  role="listitem"
+  aria-label="IconButton">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> IconButton</h2>
+      <div class="badges">
+        <label for="c-6-components-iconbutton-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-6-components-iconbutton-info" class="badge info as-toggle">1 info</label>
+        <label for="c-6-components-iconbutton-stories" class="badge ok as-toggle">5 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/IconButton/IconButton.stories.tsx">components-iconbutton · ./src/components/IconButton/IconButton.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-6-components-iconbutton-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-6-components-iconbutton-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  <input id="c-6-components-iconbutton-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">5 prop types</span>
+            </div>
+            <pre><code>Component: src/components/IconButton/IconButton.tsx::IconButton</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Required: what the button does, read by screen readers
+ */
+aria-label: string
+
+/**
+ * The icon, e.g. &lt;Heart /&gt;
+ */
+children: ReactNode
+
+/**
+ * lg 48 · default 40 · sm 32 · xs 24. Figma property: Size
+ */
+size?: &#39;lg&#39; | &#39;default&#39; | &#39;sm&#39; | &#39;xs&#39; = &#39;default&#39;
+
+type?: any = &#39;button&#39;
+
+/**
+ * Figma property: Variant
+ */
+variant?: &#39;icon&#39; | &#39;transparent&#39; | &#39;blur&#39; = &#39;transparent&#39;</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Heart, Share2, X } from 'lucide-react';
+import { IconButton } from 'hobbyx-ds';
+import { fn } from 'storybook/test';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Transparent</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Transparent = () =&gt; &lt;IconButton aria-label=&quot;Save&quot; onClick={fn()}&gt;&lt;Heart /&gt;&lt;/IconButton&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Blur</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Blur = () =&gt; &lt;IconButton aria-label=&quot;Save&quot; onClick={fn()} variant=&quot;blur&quot;&gt;&lt;Heart /&gt;&lt;/IconButton&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Icon</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Icon = () =&gt; &lt;IconButton aria-label=&quot;Close&quot; onClick={fn()} variant=&quot;icon&quot;&gt;&lt;X /&gt;&lt;/IconButton&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Disabled</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Disabled = () =&gt; &lt;IconButton aria-label=&quot;Save&quot; onClick={fn()} disabled&gt;&lt;Heart /&gt;&lt;/IconButton&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">All Sizes</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const AllSizes = (args) =&gt; (
+  &lt;div style={{ display: &#39;grid&#39;, gap: 16 }}&gt;
+    {([&#39;icon&#39;, &#39;transparent&#39;, &#39;blur&#39;] as const).map((v) =&gt; (
+      &lt;div key={v} style={{ display: &#39;flex&#39;, gap: 16, alignItems: &#39;center&#39; }}&gt;
+        {([&#39;lg&#39;, &#39;default&#39;, &#39;sm&#39;, &#39;xs&#39;] as const).map((s) =&gt; (
+          &lt;IconButton key={s} {...args} variant={v} size={s} aria-label=&quot;Share&quot;&gt;&lt;Share2 /&gt;&lt;/IconButton&gt;
+        ))}
+      &lt;/div&gt;
+    ))}
+  &lt;/div&gt;
+);</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+<article
+  id="components-input"
+  class="card 
+  no-error
+  has-info
+  no-story-error
+  no-story-warning
+  
+  no-doc-error"
+  role="listitem"
+  aria-label="Input">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Input</h2>
+      <div class="badges">
+        <label for="c-7-components-input-props" class="badge ok as-toggle">8 prop types</label>
+        <label for="c-7-components-input-info" class="badge info as-toggle">1 info</label>
+        <label for="c-7-components-input-stories" class="badge ok as-toggle">8 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/Input/Input.stories.tsx">components-input · ./src/components/Input/Input.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-7-components-input-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-7-components-input-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  <input id="c-7-components-input-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">8 prop types</span>
+            </div>
+            <pre><code>Component: src/components/Input/Input.tsx::Input</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Figma: Show Description + Description Text. Turns red when `error` is set.
+ */
+description?: string
+
+/**
+ * Figma State=Error. `true` or an error message that replaces the description.
+ */
+error?: boolean | string
+
+/**
+ * Figma: Show Label + Label Text
+ */
+label?: string
+
+/**
+ * Figma: Icon left + Icon. Search shows a magnifier by default.
+ */
+leftIcon?: ReactNode
+
+/**
+ * Search only: shows the clear (×) button when there is a value.
+ */
+onClear?: () =&gt; void
+
+/**
+ * Figma: Icon right
+ */
+rightIcon?: ReactNode
+
+/**
+ * Height: L 48 · S 40 (Figma has S only for Chat live). Figma property: Size
+ */
+size?: &#39;L&#39; | &#39;S&#39; = &#39;L&#39;
+
+/**
+ * Figma property: Type
+ */
+variant?: &#39;default&#39; | &#39;search&#39; | &#39;chat&#39; = &#39;default&#39;</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Input } from 'hobbyx-ds';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Default = () =&gt; &lt;Input
+    label=&quot;Card name&quot;
+    placeholder=&quot;e.g. Charizard Base Set&quot;
+    description=&quot;As printed on the card.&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Filled</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Filled = () =&gt; &lt;Input
+    label=&quot;Card name&quot;
+    placeholder=&quot;e.g. Charizard Base Set&quot;
+    description=&quot;As printed on the card.&quot;
+    defaultValue=&quot;Charizard Base Set&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Required</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Required = () =&gt; &lt;Input
+    label=&quot;Card name&quot;
+    placeholder=&quot;e.g. Charizard Base Set&quot;
+    description=&quot;As printed on the card.&quot;
+    required /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">With Error</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const WithError = () =&gt; &lt;Input
+    label=&quot;Card name&quot;
+    placeholder=&quot;e.g. Charizard Base Set&quot;
+    description=&quot;As printed on the card.&quot;
+    defaultValue=&quot;Charizard&quot;
+    error=&quot;Card not found. Check the spelling.&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Disabled</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Disabled = () =&gt; &lt;Input
+    label=&quot;Card name&quot;
+    placeholder=&quot;e.g. Charizard Base Set&quot;
+    description=&quot;As printed on the card.&quot;
+    disabled /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Search</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Search = () =&gt; {
+    const [value, setValue] = useState(&#39;&#39;);
+
+    return (
+        &lt;Input
+            label={undefined}
+            placeholder=&quot;Search...&quot;
+            description={undefined}
+            variant=&quot;search&quot;
+            value={value}
+            onChange={(e) =&gt; setValue(e.target.value)}
+            onClear={() =&gt; setValue(&#39;&#39;)} /&gt;
+    );
+};</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Chat Live</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ChatLive = () =&gt; &lt;Input
+    label={undefined}
+    placeholder=&quot;Say something…&quot;
+    description={undefined}
+    variant=&quot;chat&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Chat Live Small</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ChatLiveSmall = () =&gt; &lt;Input
+    label={undefined}
+    placeholder=&quot;Say something…&quot;
+    description={undefined}
+    variant=&quot;chat&quot;
+    size=&quot;S&quot; /&gt;;</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+<article
+  id="patterns-marketplacecard"
+  class="card 
+  no-error
+  has-info
+  no-story-error
+  no-story-warning
+  
+  no-doc-error"
+  role="listitem"
+  aria-label="MarketplaceCard">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> MarketplaceCard</h2>
+      <div class="badges">
+        <label for="c-8-patterns-marketplacecard-props" class="badge ok as-toggle">15 prop types</label>
+        <label for="c-8-patterns-marketplacecard-info" class="badge info as-toggle">1 info</label>
+        <label for="c-8-patterns-marketplacecard-stories" class="badge ok as-toggle">5 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/MarketplaceCard/MarketplaceCard.stories.tsx">patterns-marketplacecard · ./src/components/MarketplaceCard/MarketplaceCard.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-8-patterns-marketplacecard-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-8-patterns-marketplacecard-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  <input id="c-8-patterns-marketplacecard-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">15 prop types</span>
+            </div>
+            <pre><code>Component: src/components/MarketplaceCard/MarketplaceCard.tsx::MarketplaceCard</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Figma property: BG (Filled / Blur)
+ */
+bg?: &#39;filled&#39; | &#39;blur&#39; = &#39;filled&#39;
+
+/**
+ * Auction: number of bids next to the price
+ */
+bids?: number
+
+/**
+ * Teal note at the bottom, e.g. &quot;Completes your Base Set&quot;
+ */
+collectionNote?: string
+
+/**
+ * Bottom-left timer on the photo, e.g. &quot;Ends in 0h 38m&quot;
+ */
+endsIn?: string
+
+image: string
+
+lastSale?: string
+
+onToggleSave?: () =&gt; void
+
+predicted?: string
+
+/**
+ * Formatted price, e.g. &quot;£3,200&quot;
+ */
+price: string
+
+/**
+ * Under the price: &quot;Current bid&quot;, &quot;Starting price&quot;…
+ */
+priceLabel?: string
+
+/**
+ * Heart button state
+ */
+saved?: boolean = false
+
+/**
+ * Top-left badge, e.g. { label: &#39;Ending soon&#39;, color: &#39;yellow&#39; }
+ */
+status?: { label: string; color: BadgeColor }
+
+/**
+ * e.g. &quot;Pokémon · PSA 8&quot;
+ */
+subtitle?: string
+
+title: string
+
+/**
+ * Arrow next to the predicted price
+ */
+trend?: &#39;up&#39; | &#39;down&#39;</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { MarketplaceCard, Skeleton, Tabs } from 'hobbyx-ds';
+import slab from '../../assets/demo/card-slab.svg';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Fixed Price</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const FixedPrice = () =&gt; &lt;MarketplaceCard
+    image={slab}
+    title=&quot;Teal Guardian Holo 1st Edition&quot;
+    subtitle=&quot;TCG · PSA 8&quot;
+    price=&quot;£320&quot;
+    lastSale=&quot;£295&quot;
+    predicted=&quot;£340&quot;
+    trend=&quot;up&quot;
+    collectionNote=&quot;Completes your 1st Edition set&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Auction Ending Soon</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const AuctionEndingSoon = () =&gt; &lt;MarketplaceCard
+    image={slab}
+    title=&quot;Teal Guardian Holo 1st Edition&quot;
+    subtitle=&quot;TCG · PSA 8&quot;
+    price=&quot;£3,200&quot;
+    lastSale=&quot;£3,200&quot;
+    predicted=&quot;£3,600&quot;
+    trend=&quot;up&quot;
+    status={{ label: &#39;Ending soon&#39;, color: &#39;yellow&#39; }}
+    endsIn=&quot;Ends in 0h 38m&quot;
+    bids={14}
+    priceLabel=&quot;Current bid&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Live</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Live = () =&gt; &lt;MarketplaceCard
+    image={slab}
+    title=&quot;Teal Guardian Holo 1st Edition&quot;
+    subtitle=&quot;TCG · PSA 8&quot;
+    price=&quot;£320&quot;
+    lastSale=&quot;£295&quot;
+    predicted=&quot;£300&quot;
+    trend=&quot;down&quot;
+    status={{ label: &#39;Live&#39;, color: &#39;red&#39; }}
+    bg=&quot;blur&quot;
+    priceLabel=&quot;Starting price&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Saveable</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Heart toggles the saved state.</div>
+              <pre><code>const Saveable = () =&gt; {
+    const [saved, setSaved] = useState(false);
+
+    return (
+        &lt;MarketplaceCard
+            image={slab}
+            title=&quot;Teal Guardian Holo 1st Edition&quot;
+            subtitle=&quot;TCG · PSA 8&quot;
+            price=&quot;£320&quot;
+            lastSale=&quot;£295&quot;
+            predicted=&quot;£340&quot;
+            trend=&quot;up&quot;
+            saved={saved}
+            onToggleSave={() =&gt; setSaved((s) =&gt; !s)} /&gt;
+    );
+};</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Marketplace Grid</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">A small screen composed only from DS components: Tabs + cards + Skeleton while loading.</div>
+              <pre><code>const MarketplaceGrid = () =&gt; &lt;div style={{ width: 360, display: &#39;grid&#39;, gap: 16 }}&gt;
+    &lt;Tabs
+        aria-label=&quot;Marketplace&quot;
+        items={[{ value: &#39;all&#39;, label: &#39;All&#39; }, { value: &#39;auction&#39;, label: &#39;Auction&#39; }, { value: &#39;raffles&#39;, label: &#39;Raffles&#39; }, { value: &#39;live&#39;, label: &#39;Live&#39; }]} /&gt;
+    &lt;div style={{ display: &#39;grid&#39;, gridTemplateColumns: &#39;174px 174px&#39;, gap: 12 }}&gt;
+        &lt;MarketplaceCard
+            image={slab}
+            title=&quot;Teal Guardian Holo 1st Edition&quot;
+            subtitle=&quot;TCG · PSA 8&quot;
+            price=&quot;£320&quot;
+            lastSale=&quot;£295&quot;
+            predicted=&quot;£340&quot;
+            trend=&quot;up&quot;
+            {...AuctionEndingSoon.args} /&gt;
+        &lt;MarketplaceCard
+            image={slab}
+            title=&quot;Teal Guardian Holo 1st Edition&quot;
+            subtitle=&quot;TCG · PSA 8&quot;
+            price=&quot;£320&quot;
+            lastSale=&quot;£295&quot;
+            predicted=&quot;£340&quot;
+            trend=&quot;up&quot;
+            collectionNote=&quot;Completes your 1st Edition set&quot; /&gt;
+        &lt;MarketplaceCard
+            image={slab}
+            title=&quot;Teal Guardian Holo 1st Edition&quot;
+            subtitle=&quot;TCG · PSA 8&quot;
+            price=&quot;£320&quot;
+            lastSale=&quot;£295&quot;
+            predicted=&quot;£340&quot;
+            trend=&quot;up&quot;
+            {...Live.args} /&gt;
+        &lt;div style={{ display: &#39;grid&#39;, gap: 8, alignContent: &#39;start&#39;, padding: 8 }}&gt;
+            &lt;Skeleton height={150} style={{ borderRadius: 12 }} /&gt;
+            &lt;Skeleton width=&quot;85%&quot; height={14} /&gt;
+            &lt;Skeleton width=&quot;50%&quot; height={12} /&gt;
+            &lt;Skeleton width=&quot;40%&quot; height={16} /&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;;</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+<article
+  id="components-menu"
+  class="card 
+  no-error
+  no-info
+  no-story-error
+  no-story-warning
+  missing-api
+  no-doc-error"
+  role="listitem"
+  aria-label="Menu">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Menu</h2>
+      <div class="badges">
+        <span class="badge">no API description</span>
+        
+        <label for="c-9-components-menu-stories" class="badge ok as-toggle">2 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/Menu/Menu.stories.tsx">components-menu · ./src/components/Menu/Menu.stories.tsx</div>
+    
+    <div class="hint">Figma: DS page &quot;Menubar&quot;: `Menubar / Menu` (210:3534), `Menubar / Item / Default` (419:6748),
+`Menubar / Item / Separator` (210:3533). In HobbyX all open dropdowns use this menu.</div>
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  
+  <input id="c-9-components-menu-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  
+
+  <div class="panels">
+    
+    
+    
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Button, DropdownMenu, Menu, MenuItem, MenuSeparator } from 'hobbyx-ds';
+import { EllipsisVertical, Flag, Pencil, Share2, Tag, Trash2 } from 'lucide-react';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Panel</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">The open menu panel on its own, as in Figma.</div>
+              <pre><code>const Panel = () =&gt; &lt;Menu aria-label=&quot;Listing actions&quot;&gt;{items()}&lt;/Menu&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Dropdown</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Click the trigger. Closes on item click, outside click or Escape; arrow keys move between items.</div>
+              <pre><code>const Dropdown = () =&gt; (
+  &lt;div style={{ height: 320, display: &#39;flex&#39;, justifyContent: &#39;center&#39;, paddingTop: 16 }}&gt;
+    &lt;DropdownMenu
+      align=&quot;end&quot;
+      trigger={(props) =&gt; (
+        &lt;Button {...props} variant=&quot;tinted&quot; size=&quot;sm&quot; aria-label=&quot;More actions&quot; leftIcon={&lt;EllipsisVertical /&gt;}&gt;More&lt;/Button&gt;
+      )}
+    &gt;
+      {items(fn())}
+    &lt;/DropdownMenu&gt;
+  &lt;/div&gt;
+);</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+<article
+  id="components-radio"
+  class="card 
+  no-error
+  has-info
+  no-story-error
+  no-story-warning
+  
+  no-doc-error"
+  role="listitem"
+  aria-label="Radio">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Radio</h2>
+      <div class="badges">
+        <label for="c-10-components-radio-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-10-components-radio-info" class="badge info as-toggle">1 info</label>
+        <label for="c-10-components-radio-stories" class="badge ok as-toggle">5 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/Radio/Radio.stories.tsx">components-radio · ./src/components/Radio/Radio.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-10-components-radio-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-10-components-radio-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  <input id="c-10-components-radio-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">4 prop types</span>
+            </div>
+            <pre><code>Component: src/components/Radio/Radio.tsx::Radio</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Figma: Show Description + Description Text
+ */
+description?: string
+
+/**
+ * Bordered card around the item. Figma property: frame = yes
+ */
+framed?: boolean = false
+
+/**
+ * Figma: Show Text + Switch Text
+ */
+label?: string
+
+/**
+ * Figma property: Font Weight
+ */
+weight?: &#39;medium&#39; | &#39;regular&#39; = &#39;medium&#39;</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Radio } from 'hobbyx-ds';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Default = () =&gt; &lt;Radio name=&quot;demo&quot; label=&quot;Standard shipping&quot; description=&quot;3–5 business days&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Checked</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Checked = () =&gt; &lt;Radio
+    name=&quot;demo&quot;
+    label=&quot;Standard shipping&quot;
+    description=&quot;3–5 business days&quot;
+    defaultChecked /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Framed</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Framed = () =&gt; &lt;Radio
+    name=&quot;demo&quot;
+    label=&quot;Standard shipping&quot;
+    description=&quot;3–5 business days&quot;
+    framed
+    defaultChecked /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Disabled</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Disabled = () =&gt; &lt;Radio
+    name=&quot;demo&quot;
+    label=&quot;Standard shipping&quot;
+    description=&quot;3–5 business days&quot;
+    disabled
+    defaultChecked /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Group</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Same `name` = one group: only one option can be selected.</div>
+              <pre><code>const Group = () =&gt; (
+  &lt;div role=&quot;radiogroup&quot; aria-label=&quot;Shipping&quot; style={{ display: &#39;grid&#39;, gap: 12, width: 280 }}&gt;
+    &lt;Radio name=&quot;ship&quot; framed defaultChecked label=&quot;Standard shipping&quot; description=&quot;3–5 business days&quot; /&gt;
+    &lt;Radio name=&quot;ship&quot; framed label=&quot;Express shipping&quot; description=&quot;1–2 business days&quot; /&gt;
+    &lt;Radio name=&quot;ship&quot; framed disabled label=&quot;Vault storage&quot; description=&quot;Not available for this item&quot; /&gt;
+  &lt;/div&gt;
+);</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+<article
+  id="components-skeleton"
+  class="card 
+  no-error
+  has-info
+  no-story-error
+  no-story-warning
+  
+  no-doc-error"
+  role="listitem"
+  aria-label="Skeleton">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Skeleton</h2>
+      <div class="badges">
+        <label for="c-11-components-skeleton-props" class="badge ok as-toggle">3 prop types</label>
+        <label for="c-11-components-skeleton-info" class="badge info as-toggle">1 info</label>
+        <label for="c-11-components-skeleton-stories" class="badge ok as-toggle">3 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/Skeleton/Skeleton.stories.tsx">components-skeleton · ./src/components/Skeleton/Skeleton.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-11-components-skeleton-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-11-components-skeleton-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  <input id="c-11-components-skeleton-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">3 prop types</span>
+            </div>
+            <pre><code>Component: src/components/Skeleton/Skeleton.tsx::Skeleton</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Round shape for avatars and dots
+ */
+circle?: boolean = false
+
+/**
+ * CSS height, e.g. 27
+ */
+height?: CSSProperties[&#39;height&#39;] = 27
+
+/**
+ * CSS width, e.g. 138 or &#39;100%&#39;
+ */
+width?: CSSProperties[&#39;width&#39;] = &#39;100%&#39;</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Skeleton } from 'hobbyx-ds';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Item</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Item = () =&gt; &lt;Skeleton width={138} height={27} /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Circle</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Circle = () =&gt; &lt;Skeleton width={40} height={40} circle /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Card Loading</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Loading state of a marketplace card, built from Skeleton items.</div>
+              <pre><code>const CardLoading = () =&gt; (
+  &lt;div style={{ width: 180, display: &#39;grid&#39;, gap: 8 }}&gt;
+    &lt;Skeleton height={240} style={{ borderRadius: 16 }} /&gt;
+    &lt;Skeleton width=&quot;80%&quot; height={16} /&gt;
+    &lt;Skeleton width=&quot;50%&quot; height={16} /&gt;
+    &lt;div style={{ display: &#39;flex&#39;, gap: 8, alignItems: &#39;center&#39; }}&gt;
+      &lt;Skeleton circle width={24} height={24} /&gt;
+      &lt;Skeleton width={80} height={12} /&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+);</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+<article
+  id="components-statusicon"
+  class="card 
+  no-error
+  has-info
+  no-story-error
+  no-story-warning
+  
+  no-doc-error"
+  role="listitem"
+  aria-label="StatusIcon">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> StatusIcon</h2>
+      <div class="badges">
+        <label for="c-12-components-statusicon-props" class="badge ok as-toggle">2 prop types</label>
+        <label for="c-12-components-statusicon-info" class="badge info as-toggle">1 info</label>
+        <label for="c-12-components-statusicon-stories" class="badge ok as-toggle">5 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/StatusIcon/StatusIcon.stories.tsx">components-statusicon · ./src/components/StatusIcon/StatusIcon.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-12-components-statusicon-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-12-components-statusicon-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  <input id="c-12-components-statusicon-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">2 prop types</span>
+            </div>
+            <pre><code>Component: src/components/StatusIcon/StatusIcon.tsx::StatusIcon</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * s 40 · m 56 · L 70. Figma property: size
+ */
+size?: &#39;s&#39; | &#39;m&#39; | &#39;L&#39; = &#39;m&#39;
+
+/**
+ * Figma property: type
+ */
+type?: &#39;success&#39; | &#39;failed&#39; | &#39;warning&#39; | &#39;neutral&#39; = &#39;neutral&#39;</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { StatusIcon } from 'hobbyx-ds';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Neutral</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Neutral = () =&gt; &lt;StatusIcon /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Success</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Success = () =&gt; &lt;StatusIcon type=&quot;success&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Failed</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Failed = () =&gt; &lt;StatusIcon type=&quot;failed&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Warning</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Warning = () =&gt; &lt;StatusIcon type=&quot;warning&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">All</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const All = () =&gt; (
+  &lt;div style={{ display: &#39;grid&#39;, gridTemplateColumns: &#39;repeat(4, 90px)&#39;, gap: 24, justifyItems: &#39;center&#39;, alignItems: &#39;center&#39; }}&gt;
+    {([&#39;L&#39;, &#39;m&#39;, &#39;s&#39;] as const).flatMap((size) =&gt;
+      ([&#39;success&#39;, &#39;failed&#39;, &#39;neutral&#39;, &#39;warning&#39;] as const).map((type) =&gt; &lt;StatusIcon key={size + type} type={type} size={size} /&gt;),
+    )}
+  &lt;/div&gt;
+);</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+<article
+  id="components-switch"
+  class="card 
+  no-error
+  has-info
+  no-story-error
+  no-story-warning
+  
+  no-doc-error"
+  role="listitem"
+  aria-label="Switch">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Switch</h2>
+      <div class="badges">
+        <label for="c-13-components-switch-props" class="badge ok as-toggle">3 prop types</label>
+        <label for="c-13-components-switch-info" class="badge info as-toggle">1 info</label>
+        <label for="c-13-components-switch-stories" class="badge ok as-toggle">5 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/Switch/Switch.stories.tsx">components-switch · ./src/components/Switch/Switch.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-13-components-switch-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-13-components-switch-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  <input id="c-13-components-switch-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">3 prop types</span>
+            </div>
+            <pre><code>Component: src/components/Switch/Switch.tsx::Switch</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Figma: Show Description + Description Text
+ */
+description?: string
+
+/**
+ * Figma: Show Text + Switch Text
+ */
+label?: string
+
+/**
+ * Figma property: Text Placement
+ */
+textPlacement?: &#39;right&#39; | &#39;left&#39; = &#39;right&#39;</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Switch } from 'hobbyx-ds';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Off</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Off = () =&gt; &lt;Switch label=&quot;Price alerts&quot; description=&quot;Notify me when the price drops.&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">On</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const On = () =&gt; &lt;Switch
+    label=&quot;Price alerts&quot;
+    description=&quot;Notify me when the price drops.&quot;
+    defaultChecked /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Text Left</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const TextLeft = () =&gt; &lt;Switch
+    label=&quot;Price alerts&quot;
+    description=&quot;Notify me when the price drops.&quot;
+    defaultChecked
+    textPlacement=&quot;left&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Disabled</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Disabled = () =&gt; &lt;Switch
+    label=&quot;Price alerts&quot;
+    description=&quot;Notify me when the price drops.&quot;
+    defaultChecked
+    disabled /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Bare</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Bare = () =&gt; &lt;Switch label={undefined} description={undefined} aria-label=&quot;Price alerts&quot; /&gt;;</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+<article
+  id="components-tabs"
+  class="card 
+  no-error
+  has-info
+  no-story-error
+  no-story-warning
+  
+  no-doc-error"
+  role="listitem"
+  aria-label="Tabs">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Tabs</h2>
+      <div class="badges">
+        <label for="c-14-components-tabs-props" class="badge ok as-toggle">8 prop types</label>
+        <label for="c-14-components-tabs-info" class="badge info as-toggle">1 info</label>
+        <label for="c-14-components-tabs-stories" class="badge ok as-toggle">5 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/Tabs/Tabs.stories.tsx">components-tabs · ./src/components/Tabs/Tabs.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-14-components-tabs-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-14-components-tabs-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  <input id="c-14-components-tabs-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">8 prop types</span>
+            </div>
+            <pre><code>Component: src/components/Tabs/Tabs.tsx::Tabs</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Accessible name of the tab list
+ */
+aria-label?: string
+
+className?: string
+
+/**
+ * Selected tab on first render (uncontrolled)
+ */
+defaultValue?: string
+
+items: TabItem[]
+
+onValueChange?: (value: string) =&gt; void
+
+/**
+ * Height: S 28 · M 32 · L 36. Figma property: Size
+ */
+size?: &#39;S&#39; | &#39;M&#39; | &#39;L&#39; = &#39;M&#39;
+
+/**
+ * Controlled selected tab
+ */
+value?: string
+
+/**
+ * Figma Trigger property: Type (main / blur / Selected)
+ */
+variant?: &#39;main&#39; | &#39;blur&#39; | &#39;selected&#39; = &#39;main&#39;</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Flame } from 'lucide-react';
+import { Tabs } from 'hobbyx-ds';
+import { fn } from 'storybook/test';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Main</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Main = () =&gt; &lt;Tabs
+    aria-label=&quot;Marketplace&quot;
+    onValueChange={fn()}
+    items={[
+      { value: &#39;all&#39;, label: &#39;All&#39; },
+      { value: &#39;auction&#39;, label: &#39;Auction&#39; },
+      { value: &#39;raffles&#39;, label: &#39;Raffles&#39; },
+      { value: &#39;live&#39;, label: &#39;Live&#39; },
+      { value: &#39;rip&#39;, label: &#39;Rip &amp; Ship&#39; },
+    ]} /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Blur</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Blur = () =&gt; &lt;Tabs
+    aria-label=&quot;Marketplace&quot;
+    onValueChange={fn()}
+    items={[
+      { value: &#39;all&#39;, label: &#39;All&#39; },
+      { value: &#39;auction&#39;, label: &#39;Auction&#39; },
+      { value: &#39;raffles&#39;, label: &#39;Raffles&#39; },
+      { value: &#39;live&#39;, label: &#39;Live&#39; },
+      { value: &#39;rip&#39;, label: &#39;Rip &amp; Ship&#39; },
+    ]}
+    variant=&quot;blur&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Selected</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Selected = () =&gt; &lt;Tabs
+    aria-label=&quot;Marketplace&quot;
+    onValueChange={fn()}
+    items={[
+      { value: &#39;all&#39;, label: &#39;All&#39; },
+      { value: &#39;auction&#39;, label: &#39;Auction&#39; },
+      { value: &#39;raffles&#39;, label: &#39;Raffles&#39; },
+      { value: &#39;live&#39;, label: &#39;Live&#39; },
+      { value: &#39;rip&#39;, label: &#39;Rip &amp; Ship&#39; },
+    ]}
+    variant=&quot;selected&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">With Icon</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const WithIcon = () =&gt; &lt;Tabs
+    aria-label=&quot;Marketplace&quot;
+    onValueChange={fn()}
+    items={[{ value: &#39;hot&#39;, label: &#39;Trending&#39;, icon: &lt;Flame /&gt; }, { value: &#39;new&#39;, label: &#39;New&#39; }, { value: &#39;ending&#39;, label: &#39;Ending soon&#39; }]} /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">All Sizes</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const AllSizes = (args) =&gt; (
+  &lt;div style={{ display: &#39;grid&#39;, gap: 16 }}&gt;
+    {([&#39;S&#39;, &#39;M&#39;, &#39;L&#39;] as const).map((s) =&gt; &lt;Tabs key={s} {...args} size={s} /&gt;)}
+  &lt;/div&gt;
+);</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+<article
+  id="components-toast"
+  class="card 
+  no-error
+  has-info
+  no-story-error
+  no-story-warning
+  
+  no-doc-error"
+  role="listitem"
+  aria-label="Toast">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Toast</h2>
+      <div class="badges">
+        <label for="c-15-components-toast-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-15-components-toast-info" class="badge info as-toggle">1 info</label>
+        <label for="c-15-components-toast-stories" class="badge ok as-toggle">4 stories</label>
+        
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/Toast/Toast.stories.tsx">components-toast · ./src/components/Toast/Toast.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-15-components-toast-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-15-components-toast-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+  <input id="c-15-components-toast-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">5 prop types</span>
+            </div>
+            <pre><code>Component: src/components/Toast/Toast.tsx::Toast</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Figma: Show Button. E.g. an Undo link or a Ghost button.
+ */
+action?: ReactNode
+
+/**
+ * Figma: Show Description + Description Text
+ */
+description?: ReactNode
+
+/**
+ * Figma property: Destructive
+ */
+destructive?: boolean = false
+
+/**
+ * Replaces the default circle icon
+ */
+icon?: ReactNode
+
+/**
+ * Figma: Show Title + Title Text
+ */
+title?: ReactNode</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Button, Toast } from 'hobbyx-ds';
+import { Undo2 } from 'lucide-react';
+import { Button } from '../Button/Button';</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Default = () =&gt; &lt;Toast title=&quot;Removed from watchlist&quot; description=&quot;Charizard Base Set #4&quot; /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">With Undo</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const WithUndo = () =&gt; &lt;Toast
+    title=&quot;Removed from watchlist&quot;
+    description=&quot;Charizard Base Set #4&quot;
+    action={&lt;Button variant=&quot;link-accent&quot; size=&quot;xs&quot; leftIcon={&lt;Undo2 /&gt;}&gt;Undo&lt;/Button&gt;} /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Destructive</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Destructive = () =&gt; &lt;Toast
+    title=&quot;Upload failed&quot;
+    description=&quot;Check your connection.&quot;
+    destructive
+    action={&lt;Button variant=&quot;ghost&quot; size=&quot;sm&quot;&gt;Retry&lt;/Button&gt;} /&gt;;</code></pre>
+              
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Auto Close</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Click the button: the toast appears and closes itself after 4 s (HobbyX rule for undo toasts).</div>
+              <pre><code>const AutoClose = (args) =&gt; {
+  const [open, setOpen] = useState(false);
+  useEffect(() =&gt; {
+    if (!open) return;
+    const t = setTimeout(() =&gt; setOpen(false), 4000);
+    return () =&gt; clearTimeout(t);
+  }, [open]);
+  return (
+    &lt;div style={{ display: &#39;grid&#39;, gap: 16, justifyItems: &#39;center&#39; }}&gt;
+      &lt;Button size=&quot;sm&quot; variant=&quot;secondary&quot; onClick={() =&gt; setOpen(true)}&gt;Remove from watchlist&lt;/Button&gt;
+      {open &amp;&amp; &lt;Toast {...args} action={&lt;Button variant=&quot;link-accent&quot; size=&quot;xs&quot; leftIcon={&lt;Undo2 /&gt;} onClick={() =&gt; setOpen(false)}&gt;Undo&lt;/Button&gt;} /&gt;}
+    &lt;/div&gt;
+  );
+};</code></pre>
+              
+            </div>
+        </div>
+    
+    
+  </div>
+</article>
+    </div>
+    
+    <h2 class="section-title">Unattached Docs</h2>
+    <div class="grid" role="list">
+      
+<article
+  class="card is-doc no-doc-error"
+  role="listitem"
+  aria-label="Docs">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Introduction</h2>
+      <div class="badges">
+        
+        <label for="doc-0-introduction-docs-content" class="badge ok as-toggle">view content</label>
+      </div>
+    </div>
+    <div class="meta" title="./src/Introduction.mdx">introduction--docs · ./src/Introduction.mdx</div>
+    <div># HobbyX Design System Code version of the HobbyX (Hobby Index) design system: a dark-only...</div>
+  </div>
+
+  <!-- Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="doc-0-introduction-docs-content" class="tg tg-content" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-content">
+          <div class="mdx-content">
+            <pre><code>import { Meta, Unstyled } from &#39;@storybook/addon-docs/blocks&#39;;
+
+&lt;Meta title=&quot;Introduction&quot; /&gt;
+
+# HobbyX Design System
+
+Code version of the HobbyX (Hobby Index) design system: a dark-only marketplace and portfolio app for
+trading-card and collectibles collectors. These docs are light for easy reading; every component is shown on the
+dark app background, as in the product. Everything here is built from the Figma DS: the same variables,
+the same component properties, the same names.
+
+## How it is built
+
+| Layer | Source in Figma | In code |
+|---|---|---|
+| **Tokens** | Variables: primitives, semantic colours, spacing, radius, typography | `tokens/source/*.tokens.json` (W3C DTCG) → Style Dictionary → `--hx-*` CSS variables |
+| **Typography** | 125 text styles `text &lt;size&gt;/&lt;leading&gt;/&lt;weight&gt;` | 3 composable classes: `hx-text-sm hx-font-medium` |
+| **Components** | Component sets with Variant / Boolean / Text properties | React + TypeScript; each prop is named after its Figma property |
+| **States** | Variants `State = Hover / Pressed / Focus / Disabled` | Native CSS states (`:hover`, `:focus-visible`, `:disabled`), not props |
+
+Every value in component CSS is a token. To change a colour, change the variable in `tokens/`
+and run `npm run tokens`; every component updates.
+
+## What is inside
+
+- **Foundations:** Colors, Typography, Spacing &amp; Radius.
+- **Actions:** Button, IconButton.
+- **Forms:** Input, Checkbox, Radio, Switch.
+- **Display:** Badge, Avatar, Tabs, Skeleton.
+- **Feedback:** Alert, Toast, EmptyState, StatusIcon.
+- **Overlays:** Menu / DropdownMenu.
+- **Patterns:** MarketplaceCard: a real product card composed only from DS components.
+
+## Principles
+
+1. **Figma is the source of truth.** Code mirrors names and structure, so designers and developers talk
+   about the same `variant=&quot;ghost&quot; size=&quot;sm&quot;`.
+2. **Semantic tokens only.** Components use roles (`stroke/mute`, `bg/main`), never raw hex.
+3. **Accessible by default.** Native `&lt;button&gt;` and `&lt;input&gt;`, visible focus rings, `role=&quot;switch&quot;`,
+   `aria-*` on menus and tabs, `prefers-reduced-motion` respected. The a11y panel checks every story.
+
+## Found during the audit (next steps for the Figma DS)
+
+- Badge: red and yellow `bg` ↔ `text-icon` variable names are swapped; the dot is always grey.
+- Typography: italic styles use the Regular face; &quot;medium 10&quot; styles are Regular; no semantic text roles yet.
+- Avatar placeholder uses `bg/primary dark`, identical to the app background, so the circle disappears.
+- Toast uses a raw Tailwind colour (`emerald/900`) instead of a semantic variable.
+- Icon-only Button: `Icon` sm keeps a 20 px icon while Blur / Transparent sm use 16 px.
+- No Dialog / Bottom sheet component in the DS, although the product uses bottom sheets.
+
+### Contrast fixes (v1.1)
+
+An automated a11y check (axe, WCAG AA needs 4.5:1 for text) found five failing pairs. All of them are fixed in v1.1:
+
+| Token | Where | Before | Fix | After |
+|---|---|---|---|---|
+| `typography/Mute` on `bg/primary dark` | Input, Checkbox, Radio, Switch descriptions | zinc/500 · 4.09:1 | → zinc/400 | 7.7:1 |
+| `typography/Mute` on `bg/secondary dark` | Inactive Tabs | zinc/500 · 3.7:1 | → zinc/400 | 7.0:1 |
+| `typography/Mute` on `bg/blur` | Menu shortcuts | zinc/500 · 3.74:1 | → zinc/400 | 7.1:1 |
+| Destructive link text | Destructive link button, Menu hint | `typography/Destructive dark` red/700 · 3.05:1 | → `typography/Destructive` red/500 | 5.3:1 |
+| Badge pink filled (pink/50 text) | Badge | on pink/600 · 4.2:1 | → pink/700 | 5.5:1 |
+
+`Destructive dark` stays in the DS: it is meant for light surfaces, it was used on a dark one by mistake.
+Muted icons and borders keep zinc/500: non-text elements need 3:1, and they pass.
+The only remaining flag is the Disabled Input (2.06:1). WCAG exempts disabled controls from contrast rules.
+After the fixes all 86 stories pass the check.
+</code></pre>
+          </div>
+        </div>
+  </div>
+</article>
+<article
+  class="card is-doc no-doc-error"
+  role="listitem"
+  aria-label="Docs">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Foundations/Colors</h2>
+      <div class="badges">
+        
+        <label for="doc-1-foundations-colors-docs-content" class="badge ok as-toggle">view content</label>
+      </div>
+    </div>
+    <div class="meta" title="./src/foundations/Colors.mdx">foundations-colors--docs · ./src/foundations/Colors.mdx</div>
+    <div># Colors HobbyX is a **dark-only** product. Colours come in two layers, exported from the ...</div>
+  </div>
+
+  <!-- Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="doc-1-foundations-colors-docs-content" class="tg tg-content" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-content">
+          <div class="mdx-content">
+            <pre><code>import { Meta } from &#39;@storybook/addon-docs/blocks&#39;;
+import { SemanticColors, PrimitivePalette } from &#39;./ColorTokens&#39;;
+
+&lt;Meta title=&quot;Foundations/Colors&quot; /&gt;
+
+# Colors
+
+HobbyX is a **dark-only** product. Colours come in two layers, exported from the Figma DS variables:
+
+- **Primitives** — raw palette (Tailwind scale). Never used in components directly.
+- **Semantic tokens** — named by role (`bg`, `typography`, `stroke`…). Components use only these.
+
+A semantic token points at a primitive, so changing `teal/800` updates every brand-teal role at once.
+
+## Backgrounds
+&lt;SemanticColors group=&quot;bg&quot; /&gt;
+
+## Text
+&lt;SemanticColors group=&quot;typography&quot; /&gt;
+
+## Icons
+&lt;SemanticColors group=&quot;icons&quot; /&gt;
+
+## Borders
+&lt;SemanticColors group=&quot;stroke&quot; /&gt;
+
+## Buttons
+&lt;SemanticColors group=&quot;buttons&quot; /&gt;
+
+## Small elements
+&lt;SemanticColors group=&quot;elements&quot; /&gt;
+
+## Charts
+&lt;SemanticColors group=&quot;chart&quot; /&gt;
+
+## Primitive palette
+&lt;PrimitivePalette /&gt;
+</code></pre>
+          </div>
+        </div>
+  </div>
+</article>
+<article
+  class="card is-doc no-doc-error"
+  role="listitem"
+  aria-label="Docs">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Foundations/Typography</h2>
+      <div class="badges">
+        
+        <label for="doc-2-foundations-typography-docs-content" class="badge ok as-toggle">view content</label>
+      </div>
+    </div>
+    <div class="meta" title="./src/foundations/Typography.mdx">foundations-typography--docs · ./src/foundations/Typography.mdx</div>
+    <div># Typography One family: **Momo Trust Sans** (Google Fonts, SIL Open Font License). Weight...</div>
+  </div>
+
+  <!-- Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="doc-2-foundations-typography-docs-content" class="tg tg-content" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-content">
+          <div class="mdx-content">
+            <pre><code>import { Meta } from &#39;@storybook/addon-docs/blocks&#39;;
+import { TypeScale, Weights } from &#39;./FoundationBlocks&#39;;
+
+&lt;Meta title=&quot;Foundations/Typography&quot; /&gt;
+
+# Typography
+
+One family: **Momo Trust Sans** (Google Fonts, SIL Open Font License). Weights 400 / 500 / 600 / 700.
+
+In Figma every text style is named `text &lt;size&gt;/&lt;leading&gt;/&lt;weight&gt;` — 125 styles in total.
+In code they are not 125 classes: a style = **size + leading + weight**, combined from three small classes.
+
+```html
+&lt;p class=&quot;hx-text-sm hx-font-medium&quot;&gt;…&lt;/p&gt;          &lt;!-- text small/leading-normal/medium --&gt;
+&lt;h2 class=&quot;hx-text-2xl-tight hx-font-semibold&quot;&gt;…&lt;/h2&gt; &lt;!-- text 2x large/leading-none/semibold --&gt;
+```
+
+- **leading-normal** — fixed line height in px. Body text, multi-line.
+- **leading-none** (`-tight` in code) — line height as a ratio: 120% (10–12 px), 130% (14–20 px), 100% (24 px +). Headings, numbers, single lines.
+
+## Type scale
+&lt;TypeScale /&gt;
+
+## Weights
+&lt;Weights /&gt;
+
+## Notes from the Figma audit
+- `italic` styles are set in the Regular face (no italic applied). Not carried into code.
+- `text extra small/leading-none/medium 10` and `leading-trim/medium 10` are set in Regular, not Medium.
+- No semantic roles yet (Heading, Body, Caption, Price…). Good next step for the DS: name roles on top of this scale.
+</code></pre>
+          </div>
+        </div>
+  </div>
+</article>
+<article
+  class="card is-doc no-doc-error"
+  role="listitem"
+  aria-label="Docs">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Foundations/Spacing &amp; Radius</h2>
+      <div class="badges">
+        
+        <label for="doc-3-foundations-spacing-radius-docs-content" class="badge ok as-toggle">view content</label>
+      </div>
+    </div>
+    <div class="meta" title="./src/foundations/Spacing.mdx">foundations-spacing-radius--docs · ./src/foundations/Spacing.mdx</div>
+    <div># Spacing &amp; Radius Both scales come from the Figma variables (collection *1. TailwindCSS*,...</div>
+  </div>
+
+  <!-- Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="doc-3-foundations-spacing-radius-docs-content" class="tg tg-content" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-content">
+          <div class="mdx-content">
+            <pre><code>import { Meta } from &#39;@storybook/addon-docs/blocks&#39;;
+import { SpacingScale, RadiusScale } from &#39;./FoundationBlocks&#39;;
+
+&lt;Meta title=&quot;Foundations/Spacing &amp; Radius&quot; /&gt;
+
+# Spacing &amp; Radius
+
+Both scales come from the Figma variables (collection *1. TailwindCSS*, `spacing/*` and `radius/*`).
+Every gap, padding and corner radius in components is bound to one of these — in Figma and in code.
+
+## Spacing
+4 px base step; half-steps (`0-5`, `1-5`…) for tight UI like badges and small buttons.
+
+&lt;SpacingScale /&gt;
+
+## Radius
+HobbyX buttons and chips are fully rounded (`full`); cards and sheets use `xl`–`3xl`.
+
+&lt;RadiusScale /&gt;
+</code></pre>
+          </div>
+        </div>
+  </div>
+</article>
+    </div>
+    
+  </div>
+</main>
+</body>
+</html>  
